@@ -1,0 +1,2712 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>2026학년도 중학교 3학년 도덕 모의평가</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js for Portfolio analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Nanum+Myeongjo:wght@700;800&display=swap');
+
+    * {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .serif-title {
+      font-family: 'Nanum Myeongjo', serif;
+    }
+
+    .paper-sheet {
+      background: #ffffff;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Prevent mobile input zoom */
+    input[type="text"] {
+      font-size: 16px !important;
+    }
+
+    .choice-card:hover {
+      background-color: #f8fafc;
+      border-color: #94a3b8;
+    }
+    .choice-card:active {
+      transform: scale(0.99);
+    }
+    .choice-card.selected {
+      background-color: #eff6ff;
+      border-color: #2563eb;
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+
+    .passage-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #3b82f6;
+    }
+
+    @keyframes redPulse {
+      0%, 100% { color: #dc2626; transform: scale(1); }
+      50% { color: #ef4444; transform: scale(1.05); }
+    }
+    .urgent-timer {
+      animation: redPulse 1s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <div id="app" class="flex-1 flex flex-col">
+    <!-- Global Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+      <div class="max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-indigo-900 text-white flex items-center justify-center font-bold text-xs sm:text-sm shadow-xs shrink-0">
+            도덕
+          </div>
+          <div>
+            <h1 class="serif-title text-sm sm:text-lg font-black tracking-tight text-slate-900 leading-tight">
+              중3 도덕 모의평가
+            </h1>
+            <p class="hidden sm:block text-[11px] text-slate-500 font-medium">Ⅱ. 사회·공동체와의 관계 (25문항 · 100점 만점)</p>
+          </div>
+        </div>
+
+        <!-- Student Badge & Timer Header Info -->
+        <div id="headerExamInfo" class="hidden flex items-center space-x-2 sm:space-x-4">
+          <div class="text-right">
+            <span id="headerStudentName" class="text-xs font-bold text-slate-800 block truncate max-w-[80px] sm:max-w-none"></span>
+          </div>
+          <div class="flex items-center space-x-1.5 bg-slate-100 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-slate-200">
+            <i class="fa-regular fa-clock text-slate-600 text-xs sm:text-sm"></i>
+            <span id="timerDisplay" class="font-mono font-bold text-xs sm:text-base text-slate-800">40:00</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- [화면 1] 시작 및 학생 인증 화면 -->
+    <section id="screenIntro" class="flex-1 flex items-center justify-center p-3 sm:p-6">
+      <div class="max-w-xl w-full paper-sheet rounded-2xl p-5 sm:p-10 my-2">
+        <div class="text-center mb-6 sm:mb-8 border-b border-slate-200 pb-5 sm:pb-6">
+          <span class="inline-block bg-indigo-50 text-indigo-700 text-[11px] sm:text-xs font-semibold px-3 py-0.5 rounded-full border border-indigo-200 mb-2">
+            2026학년도 중학교 3학년 2학기
+          </span>
+          <h2 class="serif-title text-xl sm:text-3xl font-black text-slate-900 tracking-tight mb-1.5">
+            도덕 지필평가 모의고사
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500">
+            출제 범위: Ⅱ. 사회·공동체와의 관계 (도덕적 시민 / 사회 정의 / 북한 이해 / 통일 윤리)
+          </p>
+        </div>
+
+        <div class="space-y-3.5 mb-6 sm:mb-8">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1" for="inputPin">
+              학생 핀번호 (PIN 4~6자리)
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                <i class="fa-solid fa-key text-xs sm:text-sm"></i>
+              </span>
+              <input type="text" id="inputPin" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off" placeholder="예: 10301 (학번 또는 부여 코드)"
+                class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-base sm:text-sm font-medium focus:outline-none focus:border-indigo-800 focus:bg-white transition" />
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">처음 입력하는 번호는 구글 시트에 자동으로 신규 등록됩니다.</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1" for="inputName">
+              학생 성명 (실명)
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                <i class="fa-solid fa-user text-xs sm:text-sm"></i>
+              </span>
+              <input type="text" id="inputName" maxlength="10" autocomplete="off" placeholder="예: 홍길동"
+                class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-base sm:text-sm font-medium focus:outline-none focus:border-indigo-800 focus:bg-white transition" />
+            </div>
+          </div>
+
+          <div id="introStatusMsg" class="hidden p-3 rounded-xl text-xs font-medium border"></div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-3.5 sm:p-5 border border-slate-200 mb-6 sm:mb-8 text-xs text-slate-600 space-y-2 leading-relaxed">
+          <div class="font-bold text-slate-800 text-xs sm:text-sm flex items-center space-x-1.5 mb-1.5">
+            <i class="fa-solid fa-circle-info text-indigo-600"></i>
+            <span>응시자 유의사항</span>
+          </div>
+          <div>1. <strong>시험 시간:</strong> 총 40분 (타이머 종료 시 자동 마킹 제출)</div>
+          <div>2. <strong>문항 구성:</strong> 교과서 원문 지문형 5지선다 25문항 (문항당 4점, 100점 만점)</div>
+          <div>3. <strong>평가 영역:</strong> 도덕적 시민(10문항), 사회 정의(8문항), 북한 이해(4문항), 통일 윤리(3문항)</div>
+          <div>4. <strong>다회차 보장:</strong> 100문항 슬롯 매트릭스 시스템으로 5회 이상 연속 응시해도 문제 중복 0% 보장</div>
+        </div>
+
+        <div class="space-y-2.5">
+          <button type="button" id="btnStartExam" onclick="handleStartVerification(event)" 
+            class="w-full py-3.5 bg-indigo-950 active:bg-indigo-900 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-sm cursor-pointer select-none">
+            <span id="btnStartExamText">학생 확인 및 시험 시작</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+          
+          <button type="button" id="btnOpenPortfolioFromIntro" onclick="handleCheckPortfolioFromIntro(event)" 
+            class="w-full py-2.5 bg-white active:bg-slate-100 text-slate-700 font-medium rounded-xl border border-slate-300 transition text-xs flex items-center justify-center space-x-1.5 cursor-pointer select-none">
+            <i class="fa-solid fa-chart-pie text-indigo-600"></i>
+            <span>누적 도덕 포트폴리오 바로 보기</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- [화면 2] 시험장 화면 (Test Screen) -->
+    <section id="screenExam" class="hidden flex-1 max-w-5xl w-full mx-auto p-2.5 sm:p-6 space-y-4 sm:space-y-6">
+      <!-- OMR Minimap & Progress -->
+      <div class="paper-sheet rounded-2xl p-3.5 sm:p-5">
+        <div class="flex items-center justify-between gap-2 mb-2.5 pb-2.5 border-b border-slate-200">
+          <div class="flex items-center space-x-2">
+            <span class="font-bold text-xs sm:text-sm text-slate-800">OMR 마킹 현황</span>
+            <span id="answeredCountBadge" class="text-[11px] sm:text-xs bg-indigo-50 text-indigo-700 font-semibold px-2 py-0.5 rounded-full border border-indigo-200">
+              0 / 25 완료
+            </span>
+          </div>
+          <div class="flex items-center space-x-1.5 text-[11px] text-slate-500">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+            <span>완료</span>
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-200 ml-1"></span>
+            <span>미응시</span>
+          </div>
+        </div>
+
+        <div id="omrGrid" class="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-25 gap-1 text-center text-xs font-bold"></div>
+      </div>
+
+      <!-- Main Question Sheet -->
+      <div class="paper-sheet rounded-2xl p-4 sm:p-8 min-h-[480px] flex flex-col justify-between">
+        <div>
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 sm:pb-4 mb-4 sm:mb-6">
+            <div class="flex items-center space-x-2">
+              <span id="qBadgeNum" class="text-base sm:text-xl font-black text-slate-900 serif-title">[01]</span>
+              <span id="qBadgeUnit" class="text-[11px] sm:text-xs px-2 py-0.5 rounded-md font-semibold bg-indigo-50 text-indigo-800 border border-indigo-200 truncate max-w-[180px] sm:max-w-none">단원</span>
+              <span id="qBadgeTopic" class="text-[11px] sm:text-xs px-2 py-0.5 rounded-md font-semibold bg-slate-100 text-slate-700 border border-slate-200">주제</span>
+            </div>
+            <div class="text-[11px] sm:text-xs text-slate-400 font-medium">배점: 4점</div>
+          </div>
+
+          <div class="space-y-4 mb-6 sm:mb-8">
+            <!-- Passage Box (지문) -->
+            <div id="qPassageContainer" class="hidden passage-box p-3.5 sm:p-5 rounded-xl text-xs sm:text-sm text-slate-700 leading-relaxed font-normal whitespace-pre-line"></div>
+            <!-- Question prompt -->
+            <div id="qText" class="text-sm sm:text-lg font-medium text-slate-900 leading-relaxed"></div>
+          </div>
+
+          <!-- Choices container -->
+          <div id="qChoices" class="space-y-2 sm:space-y-2.5 mb-6 sm:mb-8"></div>
+        </div>
+
+        <!-- Question Bottom Action Bar -->
+        <div class="flex items-center justify-between pt-4 sm:pt-6 border-t border-slate-200">
+          <button type="button" id="btnPrevQ" onclick="navigateQuestion(-1)" 
+            class="px-3.5 py-2 sm:px-4 sm:py-2.5 bg-white border border-slate-300 active:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold rounded-xl transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+            <span>이전</span>
+          </button>
+
+          <div class="flex items-center space-x-2">
+            <button type="button" id="btnNextQ" onclick="navigateQuestion(1)" 
+              class="px-4 py-2 sm:px-5 sm:py-2.5 bg-slate-800 active:bg-slate-700 text-white text-xs sm:text-sm font-semibold rounded-xl transition flex items-center space-x-1.5">
+              <span>다음</span>
+              <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+            <button type="button" id="btnFinishExam" onclick="confirmSubmitExam()" 
+              class="hidden px-4 py-2 sm:px-5 sm:py-2.5 bg-indigo-600 active:bg-indigo-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5">
+              <i class="fa-solid fa-paper-plane text-xs"></i>
+              <span>답안 제출</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- [화면 3] 채점 결과 및 오답 풀이 (Result Screen) -->
+    <section id="screenResult" class="hidden flex-1 max-w-5xl w-full mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
+      <div class="paper-sheet rounded-2xl p-5 sm:p-8">
+        <div class="text-center max-w-md mx-auto mb-6 sm:mb-8 border-b border-slate-200 pb-5 sm:pb-6">
+          <span class="inline-block bg-green-50 text-green-700 border border-green-200 text-xs font-bold px-3 py-1 rounded-full mb-2">
+            <i class="fa-solid fa-circle-check mr-1"></i> 도덕 모의평가 채점 완료
+          </span>
+          <h2 class="serif-title text-xl sm:text-3xl font-black text-slate-900 mb-1">
+            종합 성적 리포트
+          </h2>
+          <p id="resultStudentMeta" class="text-xs sm:text-sm text-slate-500"></p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 sm:gap-3 mb-6 sm:mb-8">
+          <div class="bg-slate-50 rounded-xl p-3 sm:p-4 border border-slate-200 text-center col-span-2 sm:col-span-1">
+            <div class="text-[11px] sm:text-xs text-slate-500 font-semibold mb-1">최종 득점</div>
+            <div class="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+              <span id="resTotalScore">0</span><span class="text-xs sm:text-sm font-normal text-slate-400"> / 100</span>
+            </div>
+            <span id="resScoreSummary" class="text-[10px] sm:text-[11px] text-indigo-600 font-semibold mt-1 block">정답 0 / 오답 0</span>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-3 sm:p-4 border border-slate-200 text-center">
+            <div class="text-[11px] sm:text-xs text-slate-500 font-semibold mb-1">도덕적 시민</div>
+            <div class="text-lg sm:text-2xl font-bold text-blue-600 font-mono" id="resCitizenScore">0점</div>
+            <span class="text-[10px] text-slate-400">40점 만점</span>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-3 sm:p-4 border border-slate-200 text-center">
+            <div class="text-[11px] sm:text-xs text-slate-500 font-semibold mb-1">사회 정의</div>
+            <div class="text-lg sm:text-2xl font-bold text-emerald-600 font-mono" id="resJusticeScore">0점</div>
+            <span class="text-[10px] text-slate-400">32점 만점</span>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-3 sm:p-4 border border-slate-200 text-center">
+            <div class="text-[11px] sm:text-xs text-slate-500 font-semibold mb-1">북한 이해</div>
+            <div class="text-lg sm:text-2xl font-bold text-amber-600 font-mono" id="resNorthScore">0점</div>
+            <span class="text-[10px] text-slate-400">16점 만점</span>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-3 sm:p-4 border border-slate-200 text-center">
+            <div class="text-[11px] sm:text-xs text-slate-500 font-semibold mb-1">통일 윤리</div>
+            <div class="text-lg sm:text-2xl font-bold text-purple-600 font-mono" id="resUnificationScore">0점</div>
+            <span class="text-[10px] text-slate-400">12점 만점</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3">
+          <button type="button" onclick="handleViewPortfolio()" 
+            class="w-full sm:w-auto px-5 py-3 bg-indigo-950 active:bg-indigo-900 text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>도덕 4대 영역 포트폴리오 분석 보기</span>
+          </button>
+          <button type="button" onclick="handleRestartClinic()" 
+            class="w-full sm:w-auto px-5 py-3 bg-white active:bg-slate-100 text-slate-700 text-xs sm:text-sm font-semibold rounded-xl border border-slate-300 transition flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>틀린 문제만 다시 풀기 (오답 클리닉)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Review Section -->
+      <div class="paper-sheet rounded-2xl p-4 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-slate-200">
+          <div>
+            <h3 class="serif-title text-base sm:text-xl font-bold text-slate-900">
+              문항별 정답 및 지문 대조 해설
+            </h3>
+            <p class="text-xs text-slate-500">교과서 도덕 사상과 원리를 기반으로 취약 영역을 복습하세요.</p>
+          </div>
+          <div class="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold self-start sm:self-auto">
+            <button type="button" id="filterTabAll" onclick="setReviewFilter('ALL')" 
+              class="px-3 py-1.5 rounded-lg bg-white shadow-xs text-slate-900 transition">
+              전체 문항 (25)
+            </button>
+            <button type="button" id="filterTabWrong" onclick="setReviewFilter('WRONG')" 
+              class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
+              오답만 보기
+            </button>
+          </div>
+        </div>
+        <div id="reviewQuestionsContainer" class="space-y-4 sm:space-y-6"></div>
+      </div>
+    </section>
+
+    <!-- [화면 4] 학생 누적 학습 포트폴리오 (Portfolio Screen) -->
+    <section id="screenPortfolio" class="hidden flex-1 max-w-5xl w-full mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
+      <div class="paper-sheet rounded-2xl p-4 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8 border-b border-slate-200 pb-4 sm:pb-6">
+          <div>
+            <div class="flex items-center space-x-2 mb-1">
+              <span class="text-[11px] font-bold px-2 py-0.5 bg-indigo-100 text-indigo-800 rounded">
+                ETHICS PORTFOLIO
+              </span>
+              <span id="portfolioPinBadge" class="text-xs font-mono text-slate-500">PIN: -</span>
+            </div>
+            <h2 class="serif-title text-lg sm:text-3xl font-black text-slate-900">
+              <span id="portfolioStudentName">-</span> 학생의 누적 성취도 분석
+            </h2>
+          </div>
+          <button type="button" onclick="handleBackFromPortfolio()" 
+            class="px-3.5 py-1.5 bg-white active:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl border border-slate-300 transition flex items-center space-x-1.5 self-start sm:self-center">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>돌아가기</span>
+          </button>
+        </div>
+
+        <div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl p-4 sm:p-5 border border-indigo-200/70 mb-6 sm:mb-8">
+          <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xs sm:text-sm shrink-0 shadow-xs">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-800 mb-0.5">AI 맞춤 도덕 진단 피드백</h4>
+              <p id="portfolioAiFeedback" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                데이터를 분석 중입니다...
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center justify-between">
+              <span>회차별 득점 추이</span>
+              <span class="text-[10px] text-slate-400 font-normal">누적 성장 곡선</span>
+            </h4>
+            <div class="relative h-52 sm:h-60">
+              <canvas id="chartScoreRounds"></canvas>
+            </div>
+          </div>
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center justify-between">
+              <span>도덕 4대 핵심 영역별 정답률 (%)</span>
+              <span class="text-[10px] text-slate-400 font-normal">역량 레이더</span>
+            </h4>
+            <div class="relative h-52 sm:h-60">
+              <canvas id="chartDomainRadar"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+            세부 소단원별 정답률 통계
+          </h4>
+          <div id="portfolioTopicBars" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Custom Modal -->
+  <div id="customModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white max-w-sm w-full rounded-2xl p-5 sm:p-6 shadow-2xl border border-slate-200 text-center transform transition-all">
+      <div id="modalIconContainer" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full mx-auto flex items-center justify-center text-base sm:text-lg mb-3"></div>
+      <h3 id="modalTitle" class="text-sm sm:text-base font-bold text-slate-900 mb-1.5"></h3>
+      <p id="modalDesc" class="text-xs text-slate-600 mb-5 leading-relaxed"></p>
+      <div id="modalButtons" class="flex items-center justify-center space-x-2"></div>
+    </div>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200 py-3 sm:py-4 text-center text-[11px] sm:text-xs text-slate-400">
+    <p>중학교 3학년 도덕 모의평가 시스템 &middot; Google Apps Script Cloud Engine</p>
+  </footer>
+
+  <script>
+    // Safe storage wrapper for cross-device & iOS Safari Private Mode stability
+    const safeStorage = {
+      _mem: {},
+      getItem(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (e) {
+          return this._mem[key] || null;
+        }
+      },
+      setItem(key, val) {
+        try {
+          localStorage.setItem(key, val);
+        } catch (e) {
+          this._mem[key] = String(val);
+        }
+      },
+      removeItem(key) {
+        try {
+          localStorage.removeItem(key);
+        } catch (e) {
+          delete this._mem[key];
+        }
+      }
+    };
+
+    // Deployed Google Apps Script Web App URL
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_SjjeqVrfzC76MmpKebO4-PZGxZ1ayz9Y5OHNuYBMj6eucd1XTzTeMNeVMhj9Y8fZ/exec";
+    const EXAM_DURATION_SEC = 40 * 60; // 40분
+
+    const state = {
+      studentPin: "",
+      studentName: "",
+      verifiedStatus: null,
+      currentExamRound: 1,
+      examQuestions: [],
+      currentQuestionIndex: 0,
+      userAnswers: {},
+      timeRemaining: EXAM_DURATION_SEC,
+      timerInterval: null,
+      examStartTime: null,
+      examSubmitted: false,
+      reviewFilter: 'ALL',
+      scoreData: null,
+      roundsHistory: [],
+      domainStats: {},
+      topicStats: {}
+    };
+
+    let roundsChartInstance = null;
+    let radarChartInstance = null;
+
+    // Mobile-friendly JSONP server communication to bypass mobile CORS/302 restrictions
+    function callServerJsonp(action, params = {}, timeoutMs = 4000) {
+      return new Promise((resolve, reject) => {
+        const callbackName = 'gas_ethics_cb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+        const script = document.createElement('script');
+        let timer = null;
+
+        window[callbackName] = function(data) {
+          cleanup();
+          resolve(data);
+        };
+
+        function cleanup() {
+          if (timer) clearTimeout(timer);
+          if (script.parentNode) script.parentNode.removeChild(script);
+          delete window[callbackName];
+        }
+
+        timer = setTimeout(() => {
+          cleanup();
+          reject(new Error("서버 응답 지연 (Timeout)"));
+        }, timeoutMs);
+
+        script.onerror = function() {
+          cleanup();
+          reject(new Error("네트워크 연결 실패"));
+        };
+
+        const queryParts = [`action=${encodeURIComponent(action)}`, `callback=${callbackName}`];
+        for (const k in params) {
+          queryParts.push(`${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`);
+        }
+
+        script.src = `${GOOGLE_SCRIPT_URL}?${queryParts.join('&')}`;
+        document.body.appendChild(script);
+      });
+    }
+
+    // Local permanent student portfolio backup
+    function saveStudentPortfolioLocally(pin, name, roundData, itemLogs) {
+      try {
+        const key = `ethics_persistent_portfolio_${pin}`;
+        let portfolio = { 
+          name: name, 
+          pin: pin, 
+          rounds: [], 
+          domainStats: {
+            "도덕적 시민": { total: 0, correct: 0 },
+            "사회 정의": { total: 0, correct: 0 },
+            "북한 이해": { total: 0, correct: 0 },
+            "통일 윤리": { total: 0, correct: 0 }
+          },
+          topicStats: {} 
+        };
+        const saved = safeStorage.getItem(key);
+        if (saved) {
+          try { portfolio = JSON.parse(saved); } catch (e) {}
+        }
+
+        portfolio.name = name;
+        portfolio.rounds.push(roundData);
+
+        if (itemLogs && itemLogs.length > 0) {
+          itemLogs.forEach(item => {
+            const unit = item.unit || "도덕적 시민";
+            const topic = item.subTopic || unit;
+
+            if (!portfolio.domainStats[unit]) {
+              portfolio.domainStats[unit] = { total: 0, correct: 0 };
+            }
+            portfolio.domainStats[unit].total += 1;
+            if (item.isCorrect) portfolio.domainStats[unit].correct += 1;
+
+            if (!portfolio.topicStats[topic]) {
+              portfolio.topicStats[topic] = { total: 0, correct: 0 };
+            }
+            portfolio.topicStats[topic].total += 1;
+            if (item.isCorrect) portfolio.topicStats[topic].correct += 1;
+          });
+        }
+
+        safeStorage.setItem(key, JSON.stringify(portfolio));
+        return portfolio;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function getStudentPortfolioLocally(pin) {
+      try {
+        const saved = safeStorage.getItem(`ethics_persistent_portfolio_${pin}`);
+        return saved ? JSON.parse(saved) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function shuffleChoices(choices, correctIndex) {
+      const items = choices.map((c, i) => ({ text: c, isCorrect: i === correctIndex }));
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+      return {
+        choices: items.map(it => it.text),
+        answerIndex: items.findIndex(it => it.isCorrect)
+      };
+    }
+
+    // 25 Slots x 4 Questions = 100 Comprehensive Middle School Ethics Exam Questions
+    const SLOT_MATRIX = [
+      // Slot 1: 국가와 개인의 삶 (A국 vs B국 비교)
+      [
+        {
+          id: "S01_01", unit: "도덕적 시민", subTopic: "국가와 개인의 삶",
+          passage: `A 나라 대표: "우리는 국가가 개인의 삶에 가능한 한 간섭하지 않는 것이 바람직하다고 봅니다. 각 개인은 능력에 따라 일하고 국가는 국방이나 치안 등 최소한의 역할만 합니다."\nB 나라 대표: "우리는 국가가 개인의 삶에 적극적으로 개입하여 교육과 의료 등 복지 혜택을 보장하고 소외된 사람들을 돕는 것이 바람직하다고 봅니다."`,
+          text: "위의 A 나라와 B 나라에 대한 설명으로 가장 적절한 것은?",
+          choices: [
+            "A 나라는 복지 제도를 최우선으로 하여 세금 부담률이 매우 높다.",
+            "B 나라는 개인의 무제한적 자유 경쟁을 지향하여 국가의 개입을 배제한다.",
+            "A 나라에서는 능력이 부족하거나 불리한 조건에 놓인 사람이 생계의 어려움을 겪을 수 있다.",
+            "B 나라에서는 능력에 따른 빈부격차를 당연시하여 국가가 최소한의 치안만 담당한다.",
+            "두 나라 모두 국가가 국민의 사생활을 감시하고 생각을 조종하는 전체주의 국가이다."
+          ],
+          answer: 2,
+          explanation: "A 나라는 국가의 간섭을 최소화하는 국가관으로 능력 발휘에는 유리하나 사회적 약자가 어려움을 겪을 수 있고, B 나라는 복지를 보장하는 적극적 개입 국가관입니다."
+        },
+        {
+          id: "S01_02", unit: "도덕적 시민", subTopic: "국가와 개인의 삶",
+          passage: `"국가는 독재 권력을 유지하기 위해 사람들의 사생활을 감시하고 새로운 언어를 창조해 사람들의 생각과 행동을 조종하며 욕구를 억압한다. 주인공 윈스턴은 이에 저항하다 경찰에 체포되어 고문을 당하고 결국 무기력하게 굴복한다."\n- 조지 오웰, <1984> -`,
+          text: "윗글에 나타난 국가의 문제점으로 가장 적절한 것은?",
+          choices: [
+            "국가가 개인의 존엄성과 기본적 자유를 억압하고 인간을 수단화하고 있다.",
+            "국가가 사회 복지 혜택을 지나치게 확대하여 재정 적자를 초래하고 있다.",
+            "국민의 자발적 법 준수 의식이 결여되어 범죄가 빈번히 발생하고 있다.",
+            "국가가 시민들의 다양한 사상과 언론의 자유를 무제한으로 방임하고 있다.",
+            "국방과 치안 유지에 소홀하여 외세의 침략에 무력하게 노출되어 있다."
+          ],
+          answer: 0,
+          explanation: "오웰의 《1984》는 국가가 국민의 사생활과 사상을 통제하여 인간 존엄성을 말살하는 부정의한 전체주의 국가의 모습을 비판하고 있습니다."
+        },
+        {
+          id: "S01_03", unit: "도덕적 시민", subTopic: "국가와 개인의 삶",
+          passage: `국가는 우리 삶의 기반이므로 국가가 어떤 형태를 띠느냐에 따라 구성원의 삶의 질이 크게 달라진다. 국가가 지나치게 방임하면 사회적 불평등이 심화되고, 반대로 지나치게 간섭하면 개인의 자율성이 침해될 수 있다.`,
+          text: "국가와 국가 구성원의 올바른 관계에 대한 진술로 가장 적절한 것은?",
+          choices: [
+            "국가는 오직 지배 계급의 권력 유지를 위해서만 존재해야 한다.",
+            "국가는 어떤 경우에도 모든 국민의 사생활과 경제 활동에 절대적으로 개입해야 한다.",
+            "국가는 모든 구성원이 인간다운 삶과 행복을 누릴 수 있도록 정의로운 기반을 제공해야 한다.",
+            "개인은 국가의 명령이라면 비도덕적이거나 인권을 침해하더라도 맹목적으로 따라야 한다.",
+            "국가의 발전을 위해서는 소수 약자의 기본권 희생을 당연하게 감수해야 한다."
+          ],
+          answer: 2,
+          explanation: "정의로운 국가는 개인의 자유와 인권을 보장하고 인간다운 삶을 누릴 수 있는 토대를 제공해야 합니다."
+        },
+        {
+          id: "S01_04", unit: "도덕적 시민", subTopic: "국가와 개인의 삶",
+          passage: `태어나면서부터 우리는 국가의 일원으로서 법과 제도의 보호를 받으며 생활한다. 하지만 국가가 부패하거나 제 역할을 다하지 못할 때 시민들은 불안과 고통 속에 놓이게 된다.`,
+          text: "바람직한 국가관을 실천하기 위한 시민의 태도로 옳지 않은 것은?",
+          choices: [
+            "국가가 올바른 방향으로 나아가도록 정책에 관심을 가지고 참여한다.",
+            "국가가 정의로운 조건을 갖추도록 비판적 안목을 가지고 감시한다.",
+            "자신의 권리만 누리고 납세와 준법 등 공동체 의무는 회피한다.",
+            "사회적 약자를 배려하고 인간 존엄성을 지키는 제도를 지지한다.",
+            "공동체의 평화와 번영을 위해 다른 구성원들과 연대하고 협력한다."
+          ],
+          answer: 2,
+          explanation: "민주시민은 권리를 누리는 동시에 납세, 준법, 국방 등 공동체 구성원으로서의 의무를 성실히 이행해야 합니다."
+        }
+      ],
+
+      // Slot 2: 정의로운 국가의 조건 (인간 존엄성, 공정한 사회 제도, 보편적 가치)
+      [
+        {
+          id: "S02_01", unit: "도덕적 시민", subTopic: "정의로운 국가의 조건",
+          passage: `유니세프 보고서에 따르면 전쟁 중인 ○○국에서는 지난 1년간 학교 공습과 내전으로 수많은 어린이가 사망하였고, 식량과 의료 지원이 끊겨 수십만 명이 영양실조로 생사의 갈림길에 놓여 있다.`,
+          text: "위 사례의 국가가 '정의로운 국가'로 인정받지 못하는 가장 결정적인 이유는?",
+          choices: [
+            "다른 국가와의 무역 협정에서 흑자를 기록하지 못했기 때문에",
+            "전쟁과 재난으로부터 국민의 생명과 안전, 기본적 복지를 보장하지 못하기 때문에",
+            "대규모 첨단 군사 무기를 신속하게 개발하지 못했기 때문에",
+            "국민 모두에게 완벽히 동일한 재산을 균등 배분하지 못했기 때문에",
+            "국제 스포츠 대회에서 우수한 성적을 거두지 못했기 때문에"
+          ],
+          answer: 1,
+          explanation: "정의로운 국가는 무엇보다 전쟁, 재난 등으로부터 국민의 생명과 안전을 지키고 최소한의 인간다운 삶을 보장해야 합니다."
+        },
+        {
+          id: "S02_02", unit: "도덕적 시민", subTopic: "정의로운 국가의 조건",
+          passage: `정의로운 국가는 세 가지 핵심 조건을 갖추어야 한다.\n(가) 재난과 위협으로부터 생명을 지켜 최소한의 인간다운 삶을 누리게 함.\n(나) 일정한 절차에 따라 제도를 민주적으로 결정하고 권리를 보호하는 장치 마련.\n(다) 자유, 평등, 평화, 인권 등 인류가 지속해서 바람직하다고 여겨 온 가치 추구.`,
+          text: "(가), (나), (다)에 들어갈 정의로운 국가의 조건을 바르게 짝지은 것은?",
+          choices: [
+            "(가) 인간 존엄성 보장 - (나) 공정한 사회 제도 확립 - (다) 보편적 가치 지향",
+            "(가) 절대적 평등 구현 - (나) 강력한 권력 집중 - (다) 배타적 민족주의 추구",
+            "(가) 경제적 이익 극대화 - (나) 사법권의 일방적 행사 - (다) 군사력 확장",
+            "(가) 공정한 사회 제도 - (나) 인간 존엄성 보장 - (다) 전통문화 고수",
+            "(가) 보편적 가치 지향 - (나) 인간 존엄성 보장 - (다) 국가 권력 강화"
+          ],
+          answer: 0,
+          explanation: "(가)는 인간 존엄성 보장, (나)는 공정한 사회 제도 확립 및 운영, (다)는 보편적 가치 지향에 해당합니다."
+        },
+        {
+          id: "S02_03", unit: "도덕적 시민", subTopic: "정의로운 국가의 조건",
+          passage: `인간 존엄성을 구체적으로 규정한 인권은 언제, 어디서나, 누구나 보장받아야 한다. 또한 자유, 평등, 평화, 복지 등도 인류 역사가 발전하면서 소중히 가꾸어 온 핵심 가치이다.`,
+          text: "위 지문에서 설명하는 가치를 일컫는 개념으로 가장 적절한 것은?",
+          choices: ["상대적 가치", "보편적 가치", "도구적 가치", "물질적 가치", "배타적 가치"],
+          answer: 1,
+          explanation: "인권, 자유, 평등, 평화, 복지 등 시대와 장소를 초월하여 인류가 지속적으로 지향해 온 가치를 '보편적 가치'라고 합니다."
+        },
+        {
+          id: "S02_04", unit: "도덕적 시민", subTopic: "정의로운 국가의 조건",
+          passage: `어느 나라의 가상 대통령 후보 공약:\n- 휠체어 전용 이동로 및 장애인 엘리베이터 확충\n- 아파트 비상대피로 및 안전 방재 시설 의무화\n- 남녀 성별에 따른 임금 차별 금지 및 양성평등 실현`,
+          text: "위 공약이 지향하는 도덕적 가치를 가장 잘 묶은 것은?",
+          choices: [
+            "군사력 증강, 물질적 풍요",
+            "인간 존엄성 보장, 평등, 안전한 복지 환경",
+            "국가 권력의 강화, 소수 배제",
+            "개인주의 확산, 무한 경쟁 유도",
+            "사유재산의 국유화, 획일적 분배"
+          ],
+          answer: 1,
+          explanation: "이동권 보장, 재난 안전, 성차별 금지는 인간 존엄성과 평등, 안전한 복지 환경을 실현하기 위한 구체적 정책입니다."
+        }
+      ],
+
+      // Slot 3: 본회퍼 신학자 사례 및 국가의 도덕적 책임
+      [
+        {
+          id: "S03_01", unit: "도덕적 시민", subTopic: "국가의 도덕적 책임과 본회퍼",
+          passage: `"나치스는 히틀러를 중심으로 유대인을 차별하고 학살하였으며 제2차 세계 대전을 일으켰습니다. 국가가 타국을 침략하고 인종이 다르다는 이유로 국민을 학살하는 것은 옳지 않습니다. 우리는 정의로운 국가를 만들어 갈 책임이 있습니다."\n- 본회퍼(D. Bonhoeffer, 독일 신학자) -`,
+          text: "본회퍼의 주장을 통해 얻을 수 있는 교훈으로 가장 적절한 것은?",
+          choices: [
+            "국가의 이익을 위해서라면 인종 차별과 대량 학살도 용인될 수 있다.",
+            "국가 권력이 부당하게 인권을 탄압할 때 시민은 침묵하고 복종해야 한다.",
+            "국가는 대외 침략을 자제하고 보편적 인권과 평화를 수호해야 할 도덕적 책임이 있다.",
+            "전쟁에서 승리하는 것만이 국가의 정의를 증명하는 유일한 길이다.",
+            "종교인은 현실 정치나 국가의 부정의에 일체 관여해서는 안 된다."
+          ],
+          answer: 2,
+          explanation: "본회퍼는 나치의 유대인 학살과 침략 전쟁에 저항하며, 국가는 보편적 인권을 존중하고 평화를 지켜야 할 도덕적 책임이 있음을 역설했습니다."
+        },
+        {
+          id: "S03_02", unit: "도덕적 시민", subTopic: "국가의 도덕적 책임과 본회퍼",
+          passage: `"미치광이 운전사가 보행자들을 치며 질주할 때, 목사는 사망자를 매장하고 부상자를 치료하는 일만 해서는 안 되며 그 핸들을 빼앗아야 한다."\n- 디트리히 본회퍼 -`,
+          text: "위 비유에서 '핸들을 빼앗아야 한다'는 말의 진정한 의미는?",
+          choices: [
+            "교통 법규 위반 차량을 적극적으로 경찰에 고발해야 한다.",
+            "국가의 불의와 폭주를 방관하지 말고 근원적인 부정의를 바로잡기 위해 행동해야 한다.",
+            "모든 국가 기구를 즉시 해체하고 무정부 상태를 수립해야 한다.",
+            "개인의 사리사욕을 채우기 위해 정치적 실권을 장악해야 한다.",
+            "피해자 구호 활동은 무의미하므로 즉각 중단해야 한다."
+          ],
+          answer: 1,
+          explanation: "미치광이 운전자의 핸들을 빼앗는다는 것은 국가 권력의 부당한 폭력과 인권 유린에 대해 적극적으로 저항하고 바로잡아야 함을 뜻합니다."
+        },
+        {
+          id: "S03_03", unit: "도덕적 시민", subTopic: "국가의 도덕적 책임과 본회퍼",
+          passage: `국가가 권력을 독점하고 국민을 침략의 도구로 삼을 때 세계 평화는 위협받는다. 도덕적 시민은 국가가 정의로운 궤도를 벗어났을 때 비판하고 견제하는 자세를 지녀야 한다.`,
+          text: "국가의 도덕적 책임에 부합하지 않는 사례는?",
+          choices: [
+            "국민의 기본권을 보장하기 위해 헌법재판소를 운영한다.",
+            "취약 계층의 생계와 의료를 보장하는 사회복지망을 확충한다.",
+            "정권 비판 인사를 블랙리스트에 올리고 언론의 자유를 탄압한다.",
+            "국제 인권 규약을 준수하고 난민 구호 활동에 동참한다.",
+            "공정한 사법 절차를 통해 억울한 피해자가 없도록 제도를 정비한다."
+          ],
+          answer: 2,
+          explanation: "비판 언론을 탄압하고 블랙리스트를 작성하는 것은 인간 존엄성과 민주주의를 짓밟는 국가 폭력입니다."
+        },
+        {
+          id: "S03_04", unit: "도덕적 시민", subTopic: "국가의 도덕적 책임과 본회퍼",
+          passage: `본회퍼는 침략 전쟁과 인종 억압을 자행하는 히틀러 독재에 맞서다 사형을 선고받았다. 그는 죽음을 앞두고도 인류의 보편적 정의와 평화를 지키는 것이 진정한 신앙과 시민의 책무라고 강조했다.`,
+          text: "본회퍼의 삶의 자세를 계승하는 현대 시민의 태도로 가장 적절한 것은?",
+          choices: [
+            "국가의 부정의한 정책이라도 나와 무관하면 침묵한다.",
+            "세계 각지의 인권 유린과 전쟁 범죄에 비판적 관심을 갖고 연대한다.",
+            "자국의 경제적 이익을 위해서라면 다른 나라의 인권 침해를 묵인한다.",
+            "정치적 갈등을 피하기 위해 선거와 사회 참여를 포기한다.",
+            "다수의 의견이라면 소수의 기본권이 침해되어도 무조건 지지한다."
+          ],
+          answer: 1,
+          explanation: "본회퍼의 정신은 국내외의 부정의와 인권 침해에 침묵하지 않고 보편적 가치를 위해 연대하는 실천으로 이어집니다."
+        }
+      ],
+
+      // Slot 4: 시민의 자질 ① : 책임 의식 (소방관 기도문)
+      [
+        {
+          id: "S04_01", unit: "도덕적 시민", subTopic: "시민의 자질(책임 의식)",
+          passage: `"화염 속에서 울부짖는 사람들을 향해 기꺼이 뛰어드는 일, 내 목숨이 위태로울지라도 타인의 작은 손을 붙잡아 주는 일을 사명으로 삼는 삶. 소방관들은 수많은 현장의 위험 속에서 그 자신마저 불살라지는 희생의 순간을 맞이하기도 한다."\n- 오영환, <어느 소방관의 기도> 중에서 -`,
+          text: "윗글에 나타난 소방관의 직업윤리에서 돋보이는 바람직한 시민의 자질은?",
+          choices: ["책임 의식", "이기심", "권력욕", "수동성", "무관심"],
+          answer: 0,
+          explanation: "자신의 위험을 무릅쓰고 맡은 바 사회적 직무와 사명을 다하는 태도는 시민의 핵심 자질인 '책임 의식'에 해당합니다."
+        },
+        {
+          id: "S04_02", unit: "도덕적 시민", subTopic: "시민의 자질(책임 의식)",
+          passage: `민주 사회의 시민은 헌법이 보장하는 권리를 누리는 자유로운 주체이다. 그러나 권리만을 주장하고 공동체를 위한 책임을 외면한다면 사회 질서는 유지될 수 없다.`,
+          text: "'책임 의식'을 일상생활에서 실천하는 모습으로 가장 적절한 것은?",
+          choices: [
+            "모둠 활동 과제에서 자신이 맡은 역할을 끝까지 성실하게 완수한다.",
+            "인터넷 게시판에 익명으로 다른 사람을 비방하는 글을 올린다.",
+            "자신의 실수로 발생한 피해를 동료 학생의 탓으로 돌린다.",
+            "공공시설물을 사용한 뒤 정리하지 않고 그대로 두고 떠난다.",
+            "환경 보호 캠페인에 참여하지 않고 길거리에 쓰레기를 투기한다."
+          ],
+          answer: 0,
+          explanation: "자신이 맡은 역할과 행동에 대해 끝까지 최선을 다하고 결과를 감당하는 것이 책임 의식의 실천입니다."
+        },
+        {
+          id: "S04_03", unit: "도덕적 시민", subTopic: "시민의 자질(책임 의식)",
+          passage: `선거철이 되면 투표일이 법정 공휴일로 지정된다. 어떤 가족은 이 날을 단순한 놀러 가는 날로 여기지 않고, 온 가족이 아침 일찍 투표소에 들러 참정권을 행사한 뒤 일정을 시작한다.`,
+          text: "이 가족이 투표부터 하려는 까닭을 '시민의 자질'과 연결하여 설명한 것은?",
+          choices: [
+            "선거에 참여하지 않으면 무거운 벌금을 내야 하기 때문에",
+            "국가의 주권자로서 공직자를 올바르게 선출할 시민적 책임을 다하기 위해",
+            "특정 정당에 가입하여 경제적 이익을 얻기 위해",
+            "놀이공원의 입장료를 할인받기 위한 인증 절차를 밟기 위해",
+            "다른 사람들의 눈치를 보며 마지못해 의무를 이행하기 위해"
+          ],
+          answer: 1,
+          explanation: "투표는 민주 시민이 국가 공동체의 운영에 참여하는 가장 기본적이고 숭고한 정치적 '책임 의식'의 발현입니다."
+        },
+        {
+          id: "S04_04", unit: "도덕적 시민", subTopic: "시민의 자질(책임 의식)",
+          passage: `"한 사람의 열 걸음보다 열 사람의 한 걸음이 소중하다." 우리는 각자의 삶에 충실하면서도 사회적 역할에 대한 책임을 잊지 말아야 한다.`,
+          text: "시민의 책임 의식이 결여되었을 때 나타날 사회적 현상으로 옳지 않은 것은?",
+          choices: [
+            "공공재의 남용과 파손이 증가한다.",
+            "타인에 대한 배려가 부족해져 사회적 갈등이 빈발한다.",
+            "각종 부정부패와 안전 불감증 사고가 빈번해진다.",
+            "공동체 구성원 간의 신뢰와 연대감이 크게 강화된다.",
+            "공익 사업에 무임승차하려는 이기적 태도가 만연한다."
+          ],
+          answer: 3,
+          explanation: "책임 의식이 결여되면 신뢰와 연대감이 무너지고 사회적 불신과 갈등이 증가합니다."
+        }
+      ],
+
+      // Slot 5: 시민의 자질 ② : 연대 의식 및 애국심 (독도 최종덕 사례)
+      [
+        {
+          id: "S05_01", unit: "도덕적 시민", subTopic: "연대 의식과 진정한 애국심",
+          passage: `"파도와 바람이 거센 외딴 섬 독도에 토담집과 양식장을 세우고, 이 섬을 무인도로 둘 수 없다며 2년간의 노력 끝에 1981년 '내 본적은 독도'라며 최초로 주민등록을 이전한 사람이 바로 '독도 1호 주민' 고(故) 최종덕 씨이다."\n- 신문 기사 중에서 -`,
+          text: "최종덕 씨의 행동에 담긴 시민의 자질로 가장 적절한 것은?",
+          choices: ["국토와 공동체를 사랑하는 참된 애국심", "개인의 부동산 투기 의식", "타국에 대한 맹목적 증오심", "권력에 편승하려는 보신주의", "지역 이기주의적 편견"],
+          answer: 0,
+          explanation: "험난한 독도에 들어가 터전을 닦고 주민등록을 옮겨 영유권을 지킨 것은 국토와 국가를 사랑하는 숭고한 '애국심'의 실천입니다."
+        },
+        {
+          id: "S05_02", unit: "도덕적 시민", subTopic: "연대 의식과 진정한 애국심",
+          passage: `도덕 교과서에서 강조하는 '진정한 애국심'은 국토를 사랑하는 마음, 함께 살아가는 동료 시민을 아끼는 마음, 국가가 지향하는 정의와 평화라는 가치를 사랑하는 마음을 포괄한다.`,
+          text: "도덕적으로 바람직한 애국심의 태도로 가장 적절한 것은?",
+          choices: [
+            "자국의 역사적 과오나 잘못은 무조건 감추고 왜곡한다.",
+            "자기 나라만의 이익을 위해 다른 민족을 무시하고 배타적으로 대한다.",
+            "국가를 사랑하면서도 인류의 보편적 가치와 타국과의 조화로운 공존을 추구한다.",
+            "외국인 노동자나 다문화 가정을 차별하고 배척한다.",
+            "국제기구의 평화 유지 활동을 국가 안보에 방해된다며 전면 거부한다."
+          ],
+          answer: 2,
+          explanation: "진정한 애국심은 국수주의나 배타적 민족주의를 경계하고, 타국 및 인류의 보편적 인권과 조화를 이루는 열린 애국심이어야 합니다."
+        },
+        {
+          id: "S05_03", unit: "도덕적 시민", subTopic: "연대 의식과 진정한 애국심",
+          passage: `"풀들이 바람 속에서 넘어지지 않는 것은 서로의 손을 굳게 잡아 주기 때문이다." 인간은 홀로 살 수 없으며, 서로 연결되어 있다는 자각 속에서 고통을 함께 나누어야 한다.`,
+          text: "위 글에서 비유하고 있는 시민의 덕목은 무엇인가?",
+          choices: ["연대 의식", "경쟁 의식", "소비 의식", "준법 의식", "절약 의식"],
+          answer: 0,
+          explanation: "서로 연결되어 있음을 자각하고 더 나은 공동체를 위해 손을 잡고 협력하는 태도를 '연대 의식'이라고 합니다."
+        },
+        {
+          id: "S05_04", unit: "도덕적 시민", subTopic: "연대 의식과 진정한 애국심",
+          passage: `국제 스포츠 경기에서 국가대표팀을 응원하며 국민적 자긍심을 느끼는 것은 자연스럽다. 그러나 패배한 상대국 선수들에게 욕설을 퍼붓거나 타국 문화를 멸시하는 행동은 바람직하지 않다.`,
+          text: "위 글이 경계하고 있는 그릇된 애국심의 형태는?",
+          choices: ["열린 애국심", "배타적 민족주의 (국수주의)", "세계시민주의", "민주공화주의", "인도주의"],
+          answer: 1,
+          explanation: "자기 민족이나 국가만을 절대시하고 타국을 멸시하거나 배척하는 태도를 '배타적 민족주의' 혹은 '국수주의'라고 합니다."
+        }
+      ],
+
+      // Slot 6: 시민 참여의 방법과 의의 (공청회, 태안 기름유출 자원봉사, 기부)
+      [
+        {
+          id: "S06_01", unit: "도덕적 시민", subTopic: "시민 참여의 방법과 의의",
+          passage: `(가) 태안반도 기름 유출 사고 현장에서 방제복을 입고 자갈을 닦는 120만 자원봉사자\n(나) 지역 개발 정책의 문제점을 지적하기 위해 시청 공청회에 참석하여 발언하는 시민\n(다) 결식아동과 독거노인을 돕기 위해 매달 정기 후원금을 내는 시민`,
+          text: "(가), (나), (다)의 시민 행동이 공통으로 지향하는 가치로 가장 적절한 것은?",
+          choices: [
+            "자신의 정치적 지위 상승과 명예 획득",
+            "국가 공동체의 문제를 해결하고 공익을 증진하기 위한 자발적 시민 참여",
+            "기업의 이윤 추구 활동 지원 및 세금 감면 혜택",
+            "사적 인간관계 형성 및 사교 모임 활성화",
+            "외국 정부의 부당한 간섭에 대응하기 위한 군사 훈련"
+          ],
+          answer: 1,
+          explanation: "자원봉사, 공청회 발언, 기부 등은 시민이 사회 문제 해결에 주체적으로 나서는 '자발적 시민 참여'의 대표적 사례입니다."
+        },
+        {
+          id: "S06_02", unit: "도덕적 시민", subTopic: "시민 참여의 방법과 의의",
+          passage: `"장기나 바둑에 훈수를 두듯 국가의 공공 문제에 관심을 갖고 참견하는 시민을 '훈수꾼'이나 '잔소리꾼'이라 부를 수 있다. 이들은 쓰레기 문제부터 국가 법률에 이르기까지 적극적으로 행동하는 좋은 시민이다."\n- 이남석, <참여하는 시민, 즐거운 정치> -`,
+          text: "윗글의 필자가 강조하는 바람직한 시민상으로 가장 알맞은 것은?",
+          choices: [
+            "국가 권력의 결정을 아무 비판 없이 순종하는 소극적 시민",
+            "공동체의 현안에 능동적으로 목소리를 내고 참여하는 적극적 시민",
+            "자신의 사생활에만 몰두하고 정치에는 무관심한 방관자적 시민",
+            "남의 일에 무조건 트집을 잡고 방해하는 불평불만형 시민",
+            "모든 법과 규칙을 폐지하고 완전한 자유를 요구하는 무정부주의자"
+          ],
+          answer: 1,
+          explanation: "공공의 일에 관심을 갖고 적극적으로 의견을 개진하며 개선을 요구하는 시민은 민주 사회를 지탱하는 '적극적 시민'입니다."
+        },
+        {
+          id: "S06_03", unit: "도덕적 시민", subTopic: "시민 참여의 방법과 의의",
+          passage: `중학생인 민우는 학교 앞 통학로의 신호등 고장과 불법 주정차로 인해 친구들이 교통사고 위험에 노출된 것을 보고, 구청 홈페이지 '시민 제안' 게시판에 글을 올려 보행로 펜스 설치를 이끌어냈다.`,
+          text: "위 사례를 통해 알 수 있는 시민 참여의 의의는?",
+          choices: [
+            "청소년은 성인이 되기 전까지 사회 문제에 관여할 수 없다.",
+            "작은 생활 속 참여라도 지역 사회의 안전과 공익을 증진하는 데 크게 기여할 수 있다.",
+            "시민 참여는 반드시 대규모 시위나 집회를 통해서만 이루어진다.",
+            "공공기관의 행정은 전문가의 영역이므로 시민의 참견은 비효율을 낳는다.",
+            "행정 민원을 제기하는 것은 공무원들의 업무를 방해하는 이기적 행동이다."
+          ],
+          answer: 1,
+          explanation: "청소년도 일상에서 발견한 안전 문제를 제안하고 개선함으로써 지역 사회 공익에 충분히 기여할 수 있습니다."
+        },
+        {
+          id: "S06_04", unit: "도덕적 시민", subTopic: "시민 참여의 방법과 의의",
+          passage: `현대 민주주의는 대의제를 바탕으로 하지만, 시민들이 정치에 무관심해지면 권력자가 시민의 뜻을 왜곡할 위험이 있다.`,
+          text: "시민들이 정치적 무관심에 빠질 경우 초래될 수 있는 결과는?",
+          choices: [
+            "정치 지도자들이 국민의 눈치를 보며 더욱 청렴해진다.",
+            "소수 특권 집단의 이익만이 정책에 반영되고 민주주의가 후퇴한다.",
+            "국가 예산이 효율적이고 공정하게 분배된다.",
+            "시민들의 개별적 자유와 권리가 더욱 철저하게 보장된다.",
+            "모든 사회 구성원의 정치적 효능감이 크게 향상된다."
+          ],
+          answer: 1,
+          explanation: "시민이 참여를 포기하고 무관심해지면 특정 권력자나 이익 집단이 권력을 독점하여 민주주의가 부패하게 됩니다."
+        }
+      ],
+
+      // Slot 7: 준법의 필요성과 공익 증진 (소크라테스 크리톤 지문)
+      [
+        {
+          id: "S07_01", unit: "도덕적 시민", subTopic: "준법과 공익의 증진",
+          passage: `크리톤: "소크라테스, 당장 감옥에서 도망치게. 말도 안 되는 부당한 판결 때문에 목숨을 잃어서는 안 되네. 제발 탈옥하게."\n소크라테스: "나는 그럴 수 없네. 국가의 구성원으로서 그동안 법의 혜택을 누리며 법을 지키기로 약속했는데, 이제 와서 자신에게 불리하다고 약속을 어기는 것은 옳지 않네."\n- 플라톤, <크리톤> -`,
+          text: "소크라테스가 탈옥을 거부하고 독배를 든 도덕적 근거로 가장 적절한 것은?",
+          choices: [
+            "자신을 고발한 사람들에게 복수하기 위해서",
+            "국가와 맺은 무언의 사회적 약속이자 법적 합의를 지키는 것이 정의롭기 때문에",
+            "더 이상 살고 싶은 의지가 전혀 남아있지 않았기 때문에",
+            "사형 판결을 내린 재판관들의 도덕적 수준을 존경했기 때문에",
+            "감옥의 간수들이 너무 철저하게 경비를 서서 도망칠 방법이 없었기 때문에"
+          ],
+          answer: 1,
+          explanation: "소크라테스는 국가의 법률과 구성원으로서 맺은 약속의 신의성실 원칙을 지키기 위해 탈옥을 거부하였습니다."
+        },
+        {
+          id: "S07_02", unit: "도덕적 시민", subTopic: "준법과 공익의 증진",
+          passage: `법은 인간의 사회생활에 꼭 필요한 '최소한의 도덕'이자 강제성을 띤 행동 규칙이다. 만약 도로에서 신호등을 지키지 않거나 온라인에서 타인의 저작물을 무단 복제한다면 사회는 혼란에 빠질 것이다.`,
+          text: "우리가 법을 지켜야(준법) 하는 이유로 옳지 않은 것은?",
+          choices: [
+            "개인의 자유와 기본적 권리를 보호하기 위해",
+            "사회 질서를 평화롭고 안정되게 유지하기 위해",
+            "정의롭고 공정한 사회 제도를 실현하기 위해",
+            "권력자나 부유층만의 특권을 유지하고 보호하기 위해",
+            "공동체 구성원 전체의 이익(공익)을 증진하기 위해"
+          ],
+          answer: 3,
+          explanation: "법은 특정 계층의 특권을 지키기 위한 것이 아니라, 모든 구성원의 자유와 권리를 보장하고 사회 질서를 유지하기 위해 존재합니다."
+        },
+        {
+          id: "S07_03", unit: "도덕적 시민", subTopic: "준법과 공익의 증진",
+          passage: `영화나 음악을 불법 다운로드하는 행위, 청소년 출입 금지 시간에 PC방을 이용하는 행위, 무단횡단을 하는 행위 등은 사소해 보이지만 공익을 훼손한다.`,
+          text: "위와 같은 위법 행위가 반복될 때 발생하는 피해로 가장 적절한 것은?",
+          choices: [
+            "창작자의 권리가 침해되고 안전사고 위험이 높아져 사회적 신뢰가 무너진다.",
+            "문화 산업 시장이 급격히 활성화되고 경제 성장이 촉진된다.",
+            "국민 개개인의 법적 책임감이 크게 향상된다.",
+            "경찰관의 업무량이 현저히 줄어들어 국가 예산이 절감된다.",
+            "모든 시민이 법의 간섭 없이 완전한 행복을 누린다."
+          ],
+          answer: 0,
+          explanation: "불법 복제와 법규 위반은 저작권자의 정당한 몫을 빼앗고 질서를 무너뜨려 공동체 전체에 피해를 줍니다."
+        },
+        {
+          id: "S07_04", unit: "도덕적 시민", subTopic: "준법과 공익의 증진",
+          passage: `준법은 나 자신의 안전을 지키는 방패인 동시에 타인의 권리를 침해하지 않겠다는 도덕적 약속이다.`,
+          text: "다음 중 '준법을 통한 공익 증진'의 태도와 가장 거리가 먼 것은?",
+          choices: [
+            "스마트폰 보행 중 교통 법규를 준수하여 횡단보도를 건넌다.",
+            "인터넷에서 다른 사람의 글이나 사진을 사용할 때 출처를 밝힌다.",
+            "주변에 보는 사람이 아무도 없을 때는 쓰레기를 몰래 버린다.",
+            "소음 규정을 준수하여 늦은 밤 아파트 층간소음을 자제한다.",
+            "청소년 근로 시 근로기준법에 따른 근로계약서를 작성한다."
+          ],
+          answer: 2,
+          explanation: "보는 사람이 없을 때 쓰레기를 투기하는 것은 타율적 도덕성에 머무르는 비도덕적 행위입니다."
+        }
+      ],
+
+      // Slot 8: 청소년 근로 보호법과 법의 제정 목적 (알바 십계명)
+      [
+        {
+          id: "S08_01", unit: "도덕적 시민", subTopic: "법의 제정 목적과 약자 보호",
+          passage: `고용노동부 <청소년 알바 십계명>:\n1. 원칙적으로 만 15세 이상 청소년만 근로가 가능합니다.\n2. 근로 조건을 명시한 근로계약서를 반드시 작성해야 합니다.\n3. 청소년도 성인과 동일한 최저임금을 보장받습니다.\n4. 일하다 다치면 산재보험으로 치료와 보상을 받을 수 있습니다.`,
+          text: "국가가 위와 같이 청소년 근로 보호 법률을 제정한 궁극적 목적으로 가장 적절한 것은?",
+          choices: [
+            "청소년들의 경제 활동을 원천적으로 금지하기 위해",
+            "상대적 약자인 청소년 노동자의 기본적 권리와 건강을 보호하고 공정한 노동 환경을 보장하기 위해",
+            "사업주의 인건비 부담을 덜어주어 상업적 이윤을 늘리기 위해",
+            "청소년들에게 강제 노동을 부과하여 국가 세수를 증대시키기 위해",
+            "성인 근로자들의 일자리를 청소년들에게 강제로 이전하기 위해"
+          ],
+          answer: 1,
+          explanation: "청소년 근로 보호법은 사회적 약자 위치에 있는 미성년자의 인권과 노동권을 지키고 부당한 착취를 예방하기 위해 제정되었습니다."
+        },
+        {
+          id: "S08_02", unit: "도덕적 시민", subTopic: "법의 제정 목적과 약자 보호",
+          passage: `사업주 박 씨는 중학생 아르바이트생에게 "너는 아직 학생이니까 최저임금의 절반만 주겠다. 계약서는 번거로우니 쓰지 말자."라고 말했다.`,
+          text: "위 사업주의 행동에 대한 도덕적 평가로 가장 적절한 것은?",
+          choices: [
+            "학생의 처지를 배려하여 일자리를 준 것이므로 정의롭다.",
+            "사적 계약의 자유 원칙에 따라 법을 위반했더라도 정당하다.",
+            "사회적 약자를 보호하는 근로기준법을 위반하고 청소년의 권익을 침해한 부당한 행위이다.",
+            "경제적 효율성을 극대화하기 위해 권장되어야 할 상업적 관행이다.",
+            "청소년에게 일의 소중함을 깨닫게 해 준 훌륭한 훈육 방법이다."
+          ],
+          answer: 2,
+          explanation: "청소년에게도 법정 최저임금과 근로계약서 작성이 의무화되어 있으며, 이를 어기는 것은 명백한 위법이자 약자 침해입니다."
+        },
+        {
+          id: "S08_03", unit: "도덕적 시민", subTopic: "법의 제정 목적과 약자 보호",
+          passage: `사회적 규범에는 관습, 예절, 도덕, 법 등이 있다. 이 중 '법'은 어겼을 때 국가 권력에 의한 강제적 처벌이 따른다는 점에서 다른 규범과 뚜렷이 구별된다.`,
+          text: "이러한 법의 '강제성'이 정당성을 갖기 위해 반드시 전제되어야 할 조건은?",
+          choices: [
+            "독재자의 권력을 영구히 유지하는 데 기여해야 한다.",
+            "모든 국민의 소득 수준을 완벽하게 동일하게 통제해야 한다.",
+            "정의의 원칙과 보편적 인권, 공익을 수호하는 정당한 목적을 지녀야 한다.",
+            "어떤 상황에서도 법의 문구를 절대 개정하거나 바꾸지 말아야 한다.",
+            "오직 다수결에만 의존하여 소수자의 권익을 박탈해야 한다."
+          ],
+          answer: 2,
+          explanation: "강제성을 지닌 법이 정당성을 얻으려면, 그 내용이 인권과 정의, 공익에 부합해야 합니다."
+        },
+        {
+          id: "S08_04", unit: "도덕적 시민", subTopic: "법의 제정 목적과 약자 보호",
+          passage: `법은 '강자의 권력'을 위한 것이 아니라 '약자의 권리'를 지키는 울타리가 될 때 비로소 정의로워진다.`,
+          text: "다음 중 사회적 약자를 보호하기 위해 제정된 법률이나 제도가 아닌 것은?",
+          choices: [
+            "국민기초생활보장법",
+            "장애인 의무고용제도",
+            "청소년 보호법",
+            "고위 공직자 자녀 특혜 채용 관행",
+            "소비자 기본법"
+          ],
+          answer: 3,
+          explanation: "고위 공직자 자녀 특혜 채용은 사회적 약자를 짓밟고 공정성을 파괴하는 대표적 '부패' 행위입니다."
+        }
+      ],
+
+      // Slot 9: 시민 불복종의 개념과 4대 정당화 조건
+      [
+        {
+          id: "S09_01", unit: "도덕적 시민", subTopic: "시민 불복종의 정당화 조건",
+          passage: `국가의 정의롭지 못한 법이나 정책을 바꾸기 위해 이를 공개적이고 평화적인 방법으로 위반하는 행위를 '시민 불복종'이라고 한다.`,
+          text: "시민 불복종이 정당화되기 위한 4대 조건으로 옳지 않은 것은?",
+          choices: [
+            "행동의 목적이 사익이 아닌 사회 전체의 공익 증진에 있어야 한다. (목적의 정당성)",
+            "사회적 파급력을 높이기 위해 방화나 무장 폭력을 적극 사용해야 한다. (폭력의 정당성)",
+            "합법적인 모든 절차를 다 거친 후 마지막으로 시도되어야 한다. (최후의 수단)",
+            "법에 저항하는 과정에서 발생하는 법적 처벌을 기꺼이 감수해야 한다. (처벌 감수)",
+            "비폭력적이고 평화적인 방법으로 이루어져야 한다. (비폭력성)"
+          ],
+          answer: 1,
+          explanation: "시민 불복종은 반드시 비폭력적이고 평화적인 방식으로 전개되어야 하며, 폭력 행위는 정당화될 수 없습니다."
+        },
+        {
+          id: "S09_02", unit: "도덕적 시민", subTopic: "시민 불복종의 정당화 조건",
+          passage: `어느 집단이 자신들의 세금 감면 혜택을 늘려달라며 고속도로를 점거하고 경찰관에게 쇠파이프를 휘두르며 법 개정을 요구하였다.`,
+          text: "위 집단의 행동을 정당한 '시민 불복종'으로 인정하기 어려운 이유 두 가지는?",
+          choices: [
+            "목적의 정당성 결여 (집단 이기주의), 비폭력성 위배 (물리적 폭력 사용)",
+            "최후의 수단 미흡, 처벌 감수 태도 준수",
+            "공익 증진 부합, 평화적 시위 준수",
+            "국가 기관의 협조 부족, 언론 보도 통제",
+            "합법적 절차 준수, 종교적 신념 결여"
+          ],
+          answer: 0,
+          explanation: "자신들의 사적 이익을 목적으로 삼고 폭력을 행사했으므로 목적의 정당성과 비폭력성 조건을 정면으로 위반했습니다."
+        },
+        {
+          id: "S09_03", unit: "도덕적 시민", subTopic: "시민 불복종의 정당화 조건",
+          passage: `시민 불복종 참여자들은 기존 법 체계 자체를 완전히 부정하는 혁명가가 아니다. 그들은 법치주의의 틀을 존중하기 때문에 법을 위반함에 따른 형벌을 회피하지 않고 감수한다.`,
+          text: "위 지문에서 설명하는 시민 불복종의 정당화 조건은 무엇인가?",
+          choices: ["처벌 감수", "비밀 준수", "목적의 임의성", "물리적 강제력", "경제적 보상"],
+          answer: 0,
+          explanation: "법률을 위반한 것에 대한 법적 처벌을 달게 받는 것은 법의 권위를 존중하면서 부당성을 알리는 '처벌 감수' 조건입니다."
+        },
+        {
+          id: "S09_04", unit: "도덕적 시민", subTopic: "시민 불복종의 정당화 조건",
+          passage: `정의롭지 못한 악법이 존재할 때, 시민은 먼저 청원, 언론 제보, 헌법소원 등 법률이 허용하는 합법적 절차를 통해 이를 바로잡으려 노력해야 한다.`,
+          text: "합법적 방법이 모두 무력화되었을 때 비로소 시민 불복종을 선택해야 한다는 조건은?",
+          choices: ["최후의 수단", "신속성의 원칙", "다수결의 원칙", "비밀 행동의 원칙", "소급 적용의 원칙"],
+          answer: 0,
+          explanation: "가능한 모든 합법적 수단을 다 쓴 뒤 가장 마지막 단계에서 행사되어야 한다는 조건은 '최후의 수단'입니다."
+        }
+      ],
+
+      // Slot 10: 시민 불복종 실전 사례 (소로의 납세 거부, 로자 파크스 버스 승차 거부)
+      [
+        {
+          id: "S10_01", unit: "도덕적 시민", subTopic: "시민 불복종의 역사적 사례",
+          passage: `1846년, 월든 호숫가에 살던 헨리 데이비드 소로는 세금 징수원이 찾아오자 "비도덕적인 흑인 노예 제도를 유지하고 멕시코 침략 전쟁을 일삼는 부정의한 정부를 위해 세금을 낼 수 없다."라며 납부를 거부하고 감옥에 갇혔다.`,
+          text: "소로의 세금 납부 거부 행위에 대한 설명으로 가장 적절한 것은?",
+          choices: [
+            "자신의 재산을 아끼기 위한 경제적 탈세 행위이다.",
+            "인간의 권리와 보편적 정의를 위해 처벌을 감수하며 실천한 시민 불복종이다.",
+            "무기를 들고 정부 청사를 무력 점거한 폭력 혁명이다.",
+            "모든 법률을 지키지 않겠다고 선언한 범죄적 아나키즘이다.",
+            "다른 사람들의 세금 부담을 늘리기 위한 이기적 처신이다."
+          ],
+          answer: 1,
+          explanation: "소로는 노예제와 침략 전쟁이라는 국가의 부도덕성에 항의하여 처벌을 감수하고 세금을 거부한 대표적 시민 불복종 사상가입니다."
+        },
+        {
+          id: "S10_02", unit: "도덕적 시민", subTopic: "시민 불복종의 역사적 사례",
+          passage: `1955년 미국 몽고메리시에서 흑인 여성 로자 파크스는 백인 좌석에 자리를 양보하라는 버스 기사의 명령을 거부하여 체포되었다. 당시 흑백 분리법은 흑인 차별을 정당화하고 있었다. 이에 시민들은 381일 동안 평화적인 '버스 타기 거부 운동'을 전개하여 마침내 법의 폐지를 이끌어냈다.`,
+          text: "로자 파크스의 버스 승차 거부 운동이 역사적으로 높이 평가받는 까닭은?",
+          choices: [
+            "버스 회사를 파산시켜 경제적 보복을 달성했기 때문에",
+            "인종 차별이라는 부당한 법률에 맞서 비폭력 평화적인 방법으로 인권을 신장시켰기 때문에",
+            "무장 단체를 결성하여 백인 거주지를 습격했기 때문에",
+            "법에 따른 처벌을 피하기 위해 외국으로 망명했기 때문에",
+            "특정 정당의 선거 승리를 위해 기획된 정치 공작이었기 때문에"
+          ],
+          answer: 1,
+          explanation: "로자 파크스의 행동은 인종 차별이라는 부당한 악법에 맞서 비폭력과 처벌 감수로 맞서 인권 평등을 실현한 정당한 시민 불복종입니다."
+        },
+        {
+          id: "S10_03", unit: "도덕적 시민", subTopic: "시민 불복종의 역사적 사례",
+          passage: `"나는 법에 관한 존경심보다 먼저 인간의 권리를 존중하는 마음부터 키우는 것이 옳다고 생각합니다."\n- 헨리 데이비드 소로 -`,
+          text: "위 인용문이 오늘날 우리에게 던지는 도덕적 메시지로 가장 적절한 것은?",
+          choices: [
+            "형식적인 법률 준수보다 더 중요한 것은 인간 존엄성과 정의라는 도덕적 본질이다.",
+            "개인의 편리와 이익을 위해 법률을 자의적으로 어겨도 무방하다.",
+            "모든 법은 악법이므로 법 제도를 전면 폐지해야 한다.",
+            "국가 권력이 존재하는 한 개인의 권리는 절대 지켜질 수 없다.",
+            "법에 대한 비판적 평가는 전문가에게만 맡겨야 한다."
+          ],
+          answer: 0,
+          explanation: "법은 인간의 권리와 존엄성을 수호하기 위한 도구이므로, 법 자체가 인간의 존엄을 짓밟을 때는 비판적 성찰이 필요함을 시사합니다."
+        },
+        {
+          id: "S10_04", unit: "도덕적 시민", subTopic: "시민 불복종의 역사적 사례",
+          passage: `간디의 소금 행진, 마틴 루서 킹 목사의 흑인 참정권 행진, 로자 파크스의 버스 승차 거부, 소로의 납세 거부.`,
+          text: "위 사례들의 공통점으로 옳은 것을 <보기>에서 고른 것은?\n<보기>\nㄱ. 특정 소수의 권력 쟁취를 목적으로 하였다.\nㄴ. 폭력적인 물리력 사용을 단호히 배제하였다.\nㄷ. 불의한 제도와 법률의 개정을 요구하였다.\nㄹ. 법적 처벌과 체포를 기꺼이 감수하였다.",
+          choices: ["ㄱ, ㄴ", "ㄴ, ㄷ", "ㄱ, ㄷ, ㄹ", "ㄴ, ㄷ, ㄹ", "ㄱ, ㄴ, ㄷ, ㄹ"],
+          answer: 3,
+          explanation: "역사적 시민 불복종은 공익과 정의를 목적으로 비폭력 원칙(ㄴ), 악법 개정 요구(ㄷ), 처벌 감수(ㄹ)를 일관되게 지켰습니다."
+        }
+      ],
+
+      // Slot 11: 사회 정의의 정의와 공정성 (디케 여신상 상징)
+      [
+        {
+          id: "S11_01", unit: "사회 정의", subTopic: "사회 정의와 공정성",
+          passage: `그리스 신화에 나오는 '정의의 여신' 디케(Dike)의 조각상은 대부분 한 손에는 (가)저울을, 다른 한 손에는 (나)칼을 들고 있으며, 두 눈은 (다)안대로 가리고 있다.`,
+          text: "(가), (나), (다)가 상징하는 정의의 의미를 바르게 짝지은 것은?",
+          choices: [
+            "(가) 분배의 형평성과 공정성 - (나) 법 집행의 엄격성과 정의의 실현력 - (다) 선입견과 편견 없는 공평한 판단",
+            "(가) 물질적 부의 계량 - (나) 군사적 정복 - (다) 현실 정치에 대한 무관심",
+            "(가) 범죄자의 처벌 - (나) 재산의 몰수 - (다) 사법적 불평등",
+            "(가) 기계적 동일 분배 - (나) 전쟁의 승리 - (다) 강자에 대한 복종",
+            "(가) 권력의 무게 - (나) 공직자의 권위 - (다) 국민에 대한 감시"
+          ],
+          answer: 0,
+          explanation: "저울은 공정한 형평성, 칼은 엄정한 법 집행력, 가린 눈은 당사자의 지위나 빈부, 인종에 얽매이지 않는 공평무사한 판단을 상징합니다."
+        },
+        {
+          id: "S11_02", unit: "사회 정의", subTopic: "사회 정의와 공정성",
+          passage: `축구공을 하루 8~9시간 꿰매는 파키스탄의 어린이는 하루에 몇백 원을 받지만, 그 축구공은 선진국에서 수만 원에 팔린다. 어린이는 정작 축구공을 찰 시간도 학교에 갈 기회도 없다.`,
+          text: "위 사례를 도덕적으로 비판하는 근거로 가장 적절한 것은?",
+          choices: [
+            "자본주의 시장 경제에서 가격이 저렴할수록 무조건 정의롭기 때문이다.",
+            "노동의 대가가 정당하게 분배되지 않고 아동의 인권과 교육받을 권리가 침해되었기 때문이다.",
+            "선진국 소비자들이 축구공을 너무 비싸게 구매하여 피해를 입었기 때문이다.",
+            "기계가 아닌 수작업으로 축구공을 제작하여 생산성이 떨어지기 때문이다.",
+            "어린이들이 축구 실력을 기를 수 있는 훈련 시설이 부족하기 때문이다."
+          ],
+          answer: 1,
+          explanation: "아동 노동 착취와 극단적인 불공정 분배는 사회 정의와 보편적 인권에 정면으로 위배되는 부정의한 사례입니다."
+        },
+        {
+          id: "S11_03", unit: "사회 정의", subTopic: "사회 정의와 공정성",
+          passage: `과거 고대 아테네에서는 여성과 노예에게 참정권을 주지 않았고, 근대 초기까지도 특정 신분이나 인종에게만 투표권을 허용하였다.`,
+          text: "이러한 역사적 사실이 현대 사회 정의 관점에서 비판받는 핵심 이유는?",
+          choices: [
+            "투표용지 인쇄 비용을 과다하게 지출했기 때문에",
+            "모든 인간의 동등한 존엄성과 참정권이라는 기본적 권리를 차별했기 때문에",
+            "선거 관리 기구의 투표함 개표 작업이 지연되었기 때문에",
+            "투표율이 낮아 정부의 행정 명령이 집행되지 못했기 때문에",
+            "남성 시민들의 국방 의무 부담이 과중해졌기 때문에"
+          ],
+          answer: 1,
+          explanation: "신분이나 성별에 따라 기본권 행사를 차별하는 것은 평등과 인간 존엄성이라는 사회 정의 원리에 어긋납니다."
+        },
+        {
+          id: "S11_04", unit: "사회 정의", subTopic: "사회 정의와 공정성",
+          passage: `"사회 정의(Social Justice)란 사회를 공평하고 올바르게 구성하는 공정성의 원리로, 사회적으로 옳고 그름을 평가하고 판단하는 도덕적 기준이다."`,
+          text: "사회 정의가 바로 선 사회의 모습으로 가장 적절한 것은?",
+          choices: [
+            "권력과 부를 가진 사람이 법 집행에서 항상 예외적인 특혜를 받는다.",
+            "출신 배경이나 장애 여부에 상관없이 동등한 법과 기회의 보장을 받는다.",
+            "모든 구성원에게 능력과 상관없이 똑같은 봉급을 강제로 지급한다.",
+            "경제적 성장을 위해 근로자의 노동권과 인권을 제한한다.",
+            "소외 계층에 대한 지원을 전면 중단하고 오직 약육강식 경쟁을 방임한다."
+          ],
+          answer: 1,
+          explanation: "정의로운 사회에서는 모든 사회 구성원이 차별 없이 공정하게 대우받고 실질적인 기본권을 보장받습니다."
+        }
+      ],
+
+      // Slot 12: 정의로운 사회를 추구하는 까닭 (마틴 루서 킹 연설문)
+      [
+        {
+          id: "S12_01", unit: "사회 정의", subTopic: "정의로운 사회를 추구하는 까닭",
+          passage: `"나에게는 꿈이 있습니다. 나의 네 자녀가 피부색이 아니라 인격에 따라 평가받는 나라에서 살게 되는 꿈입니다. 언젠가 옛 노예의 후손과 노예 주인의 후손이 형제애의 식탁에 함께 둘러앉는 꿈입니다."\n- 마틴 루서 킹 목사, <나에게는 꿈이 있습니다> -`,
+          text: "마틴 루서 킹 목사가 추구한 '정의로운 사회'의 모습으로 가장 적절한 것은?",
+          choices: [
+            "백인에 대한 흑인의 무력 복수와 지배가 확립된 사회",
+            "인종이나 피부색에 따른 차별 없이 모든 인간의 존엄과 평등이 보장되는 사회",
+            "노예 제도를 합법화하여 경제적 생산력을 증대시키는 사회",
+            "다수 인종의 권익만을 위해 소수 인종의 법적 권리를 제한하는 사회",
+            "정치적 자유보다 경제적 부의 축적만을 최우선으로 삼는 사회"
+          ],
+          answer: 1,
+          explanation: "킹 목사는 인종 차별의 종식과 모든 인간이 차별 없이 인격으로 평가받는 평등하고 정의로운 사회를 꿈꾸었습니다."
+        },
+        {
+          id: "S12_02", unit: "사회 정의", subTopic: "정의로운 사회를 추구하는 까닭",
+          passage: `우리가 정의로운 사회를 추구하는 까닭은 크게 세 가지이다.\n(1) 모든 구성원의 기본적 권리를 동등하게 보장하기 위해\n(2) 사회적 자원과 몫을 공정하게 분배하기 위해\n(3) 서로 신뢰하고 협력하는 도덕적 공동체를 만들기 위해`,
+          text: "위 설명에 비추어 볼 때, 정의로운 사회가 구성원에게 미치는 영향으로 옳은 것은?",
+          choices: [
+            "사회에 대한 불신과 분노가 커져 집단 갈등이 격화된다.",
+            "특정 계층만 기회를 독점하여 사회 이동성이 단절된다.",
+            "자신이 공정하게 대우받는다는 믿음이 생겨 사회적 협력과 통합이 촉진된다.",
+            "개인의 개성과 자율적 능력 발휘가 억압된다.",
+            "법에 대한 존중감이 사라지고 범죄율이 급증한다."
+          ],
+          answer: 2,
+          explanation: "정의로운 사회에서는 공정한 대우를 체감한 구성원 간의 신뢰와 사회적 통합이 견고해집니다."
+        },
+        {
+          id: "S12_03", unit: "사회 정의", subTopic: "정의로운 사회를 추구하는 까닭",
+          passage: `"만약 우리 사회가 특정 배경이나 권력을 가진 사람에게만 유리한 룰을 강요한다면, 약자들은 절망하고 사회를 신뢰하지 않을 것이다."`,
+          text: "위 글이 강조하는 정의로운 사회 추구의 이유로 가장 알맞은 것은?",
+          choices: ["신뢰하고 협력하는 공동체 형성", "국가 재정 수입의 극대화", "사법 기관의 무제한 권한 부여", "국제 분쟁에서의 군사적 우위", "전통적 관행의 무조건적 보존"],
+          answer: 0,
+          explanation: "공정성이 훼손되면 불신이 팽배해지므로, 상호 신뢰와 협력의 공동체를 구축하기 위해 정의로운 사회가 필수적입니다."
+        },
+        {
+          id: "S12_04", unit: "사회 정의", subTopic: "정의로운 사회를 추구하는 까닭",
+          passage: `미국의 여성 참정권 운동가 수전 앤서니는 1872년 여성에게 투표권이 없던 시절 투표를 강행하여 벌금형을 선고받았다. 그녀는 "여성도 법을 만드는 데 참여할 때 비로소 사회 정의가 실현된다"라며 전국을 순회했다.`,
+          text: "수전 앤서니의 활동이 지향한 정의로운 사회의 조건은?",
+          choices: ["성별에 관계없는 평등한 기본권(참정권) 보장", "남성에 대한 법적 권리 박탈", "선거 비용 절감을 위한 간접선거 도입", "사회주의적 계획경제 수립", "사법부 판결에 대한 맹목적 복종"],
+          answer: 0,
+          explanation: "앤서니는 여성의 참정권 쟁취를 통해 모든 인간이 동등하게 법과 정치 과정에 참여하는 정의를 실현하고자 했습니다."
+        }
+      ],
+
+      // Slot 13: 존 롤스(J. Rawls)의 정의론
+      [
+        {
+          id: "S13_01", unit: "사회 정의", subTopic: "존 롤스의 정의론",
+          passage: `"정의로운 사회를 실현하려면 누구에게도 유리하거나 불리하지 않은 공정한 절차에 따라 정의의 원칙을 합의해야 한다. 모든 사람은 기본적 자유를 평등하게 누려야 하며, 사회적·경제적 불평등은 사회적 약자(최소 수혜자)에게 최대의 이익이 돌아가도록 편성될 때 비로소 정당화될 수 있다."\n- 존 롤스, <정의론> -`,
+          text: "롤스의 정의관에 대한 진술로 가장 적절한 것은?",
+          choices: [
+            "사회적 약자를 배려하는 정책은 공정한 경쟁을 해치므로 전면 폐지해야 한다.",
+            "사상의 자유나 신체의 자유 등 기본적 자유는 경제적 이익을 위해 제한될 수 있다.",
+            "절차가 공정하다면 불평등 자체는 인정하되, 최소 수혜자에게 최대의 혜택이 주어져야 한다.",
+            "결과의 완벽한 평등을 위해 모든 사람의 재산을 균등하게 강제 몰수해야 한다.",
+            "경쟁의 출발선은 자연적 우연이나 부모의 재력에 따라 결정되는 것이 정의롭다."
+          ],
+          answer: 2,
+          explanation: "롤스는 기본적 자유의 평등한 보장을 전제로, 사회적·경제적 불평등은 사회의 가장 열악한 처지에 있는 '최소 수혜자'에게 최대의 이익이 돌아가도록(차등의 원칙) 편성될 때 정당화된다고 보았습니다."
+        },
+        {
+          id: "S13_02", unit: "사회 정의", subTopic: "존 롤스의 정의론",
+          passage: `롤스는 자신이 사회에서 어떤 위치(부유층인지 빈곤층인지, 건강한지 장애가 있는지)에 처하게 될지 전혀 모르는 가상의 상태를 가정하여 정의의 원칙을 세워야 한다고 보았다.`,
+          text: "이 가상의 공정한 계약 상태를 롤스는 무엇이라 불렀는가?",
+          choices: ["원초적 입장 (무지의 베일)", "약육강식의 자연 상태", "신분제적 계급 상태", "전체주의적 감시 상태", "무한 경쟁 상태"],
+          answer: 0,
+          explanation: "자신의 사회적 지위나 조건을 모르는 '무지의 베일'을 쓴 '원초적 입장'에서 합의된 원칙이 공정성을 담보할 수 있다고 보았습니다."
+        },
+        {
+          id: "S13_03", unit: "사회 정의", subTopic: "존 롤스의 정의론",
+          passage: `롤스의 제2원칙 중 하나는 "모든 사람에게 공직이나 사회적 지위에 오를 수 있는 실질적인 기회가 균등하게 열려 있어야 한다"는 원칙이다.`,
+          text: "이 원칙의 명칭으로 가장 적절한 것은?",
+          choices: ["공정한 기회 균등의 원칙", "절대적 결과 평등의 원칙", "자유 방임의 원칙", "선착순의 원칙", "혈연 세습의 원칙"],
+          answer: 0,
+          explanation: "모든 사람에게 기회가 실질적으로 열려 있어야 한다는 원칙은 '공정한 기회 균등의 원칙'입니다."
+        },
+        {
+          id: "S13_04", unit: "사회 정의", subTopic: "존 롤스의 정의론",
+          passage: `체육대회 1등 상금으로 받은 10만 원 상품권을 분배하는 세 가지 의견:\n(A) 우리 반이 1등을 하는 데 가장 큰 기여를 한 순서대로 차등 지급하자.\n(B) 반 학생 전원에게 똑같은 금액으로 균등하게 나누어 주자.\n(C) 형편이 어려워 학용품이 꼭 필요한 친구들에게 우선적으로 배려하자.`,
+          text: "위 중 롤스의 '최소 수혜자 배려(차등의 원칙)'의 취지와 가장 가까운 의견은?",
+          choices: ["(C)", "(A)", "(B)", "(A)와 (B)", "셋 다 무관하다"],
+          answer: 0,
+          explanation: "자신이 처한 환경 때문에 학용품 구매가 어려운 약자(필요가 큰 구성원)를 우선 배려하는 것은 롤스의 최소 수혜자 보호 원칙과 상통합니다."
+        }
+      ],
+
+      // Slot 14: 공정한 경쟁의 필요성과 순기능
+      [
+        {
+          id: "S14_01", unit: "사회 정의", subTopic: "공정한 경쟁의 필요성",
+          passage: `사회에서 사람들이 얻고자 하는 재화나 일자리, 명예와 같은 자원은 한정되어 있다. 따라서 사회 구성원 사이에서 경쟁은 불가피하게 발생한다.`,
+          text: "사회가 경쟁을 통해 얻을 수 있는 긍정적인 순기능으로 가장 적절한 것은?",
+          choices: [
+            "한정된 자원을 효율적으로 분배하고 개인의 역량 계발과 사회 발전을 촉진한다.",
+            "경쟁에서 패배한 사람들을 사회적으로 완전히 도태시켜 부담을 없앤다.",
+            "이기기 위해서라면 반칙과 편법을 사용하는 법을 익히게 한다.",
+            "사회 구성원 간의 위화감과 적대감을 높여 갈등을 조장한다.",
+            "부모의 부와 인맥을 자녀에게 세습하는 합법적 통로를 열어준다."
+          ],
+          answer: 0,
+          explanation: "경쟁은 한정된 자원의 효율적 배분과 개인의 창의적 노력 및 사회 전체의 역량 향상을 이끄는 순기능이 있습니다."
+        },
+        {
+          id: "S14_02", unit: "사회 정의", subTopic: "공정한 경쟁의 필요성",
+          passage: `운동선수들이 경기에서 이기기 위해 금지 약물을 복용하거나, 기업이 독점적 지위를 이용해 부당한 담합을 저지른다면 경쟁의 순기능은 상실된다.`,
+          text: "불공정한 경쟁이 사회에 미치는 해악으로 가장 적절한 것은?",
+          choices: [
+            "사회 구성원 간의 신뢰와 협력이 깨지고 공동체 질서가 붕괴된다.",
+            "새로운 혁신 기업의 시장 진입이 대폭 늘어난다.",
+            "소비자들에게 더 질 좋은 상품이 저렴하게 공급된다.",
+            "모든 국민의 근로 의욕이 크게 고취된다.",
+            "국제적인 국가 신인도가 향상되어 투자가 급증한다."
+          ],
+          answer: 0,
+          explanation: "불공정한 수단과 반칙이 난무하면 구성원 간 신뢰가 붕괴되고 성실하게 노력한 사람이 피해를 보게 됩니다."
+        },
+        {
+          id: "S14_03", unit: "사회 정의", subTopic: "공정한 경쟁의 필요성",
+          passage: `경쟁 그 자체는 악한 것도 선한 것도 아니다. 경쟁이 어떤 규칙과 환경 속에서 치러지느냐에 따라 정의로울 수도 있고 파괴적일 수도 있다.`,
+          text: "경쟁을 정의롭게 만드는 전제 조건으로 옳지 않은 것은?",
+          choices: [
+            "모든 참가자에게 동일한 경기 규칙이 공정하게 적용되어야 한다.",
+            "불리한 조건에 있는 약자에게도 참여할 수 있는 실질적 기회가 주어져야 한다.",
+            "경쟁에서 탈락한 사람도 최소한의 삶을 영위할 수 있는 안전망이 있어야 한다.",
+            "오직 결과만을 중시하여 과정에서의 사소한 반칙은 눈감아주어야 한다.",
+            "심판과 심사위원의 판정은 투명하고 공정해야 한다."
+          ],
+          answer: 3,
+          explanation: "과정의 공정성이 무너지면 경쟁의 결과 또한 결코 정당화될 수 없습니다."
+        },
+        {
+          id: "S14_04", unit: "사회 정의", subTopic: "공정한 경쟁의 필요성",
+          passage: `체육대회 계주 경기에서 한 팀만 트랙 안쪽에서 뛰게 하거나 출발 신호 전에 먼저 달리게 한다면, 아무도 그 결과를 승복하지 않을 것이다.`,
+          text: "위 사례가 시사하는 공정한 경쟁의 핵심 가치는?",
+          choices: ["기회의 평등과 절차적 공정성", "결과의 기계적 분할", "승자 독식의 정당화", "속도전의 우월성", "연장자의 우선권"],
+          answer: 0,
+          explanation: "모든 참가자가 승복할 수 있는 공정한 출발선과 절차적 규칙 적용이 필수적입니다."
+        }
+      ],
+
+      // Slot 15: 공정한 경쟁의 3대 조건
+      [
+        {
+          id: "S15_01", unit: "사회 정의", subTopic: "공정한 경쟁의 3대 조건",
+          passage: `시각 장애 1급인 권 씨는 자격증 시험을 치렀으나 글씨가 잘 보이지 않아 시간이 턱없이 부족했다. 인권위원회의 권고에 따라 주관사는 장애인 응시자에게 비장애인보다 1.2~1.5배의 시험 시간을 연장 부여하기로 하였다.`,
+          text: "시각 장애인에게 시험 시간을 더 부여한 조치가 부합하는 '공정한 경쟁의 조건'은?",
+          choices: [
+            "경쟁 규칙의 기계적·형식적 동일 적용",
+            "경쟁 참여 기회의 실질적 보장",
+            "경쟁 결과에 대한 차등 없는 배분",
+            "비장애인에 대한 역차별 허용",
+            "자격증 취득 기준의 전면 완화"
+          ],
+          answer: 1,
+          explanation: "장애로 인해 겪는 불리함을 보완하여 비장애인과 실질적으로 동등하게 겨룰 수 있도록 배려하는 것은 '참여 기회의 실질적 보장'입니다."
+        },
+        {
+          id: "S15_02", unit: "사회 정의", subTopic: "공정한 경쟁의 3대 조건",
+          passage: `숲의 우두머리를 뽑는 시험:\n"공정하게 경쟁하기 위해 모두 같은 시험을 치릅니다. 원숭이, 코끼리, 물고기, 늑대, 펭귄 모두 저 높은 나무 꼭대기에 가장 먼저 올라간 동물이 우두머리입니다."`,
+          text: "위 우화의 시험 방식이 불공정한 이유로 가장 적절한 것은?",
+          choices: [
+            "시험 과목이 너무 쉽고 변별력이 없기 때문에",
+            "동물들의 신체적 특성과 조건을 무시한 채 겉으로만 똑같은 규칙을 강요하여 실질적 기회를 박탈했기 때문에",
+            "원숭이에게 지나치게 불리한 규칙을 적용했기 때문에",
+            "우두머리를 뽑는 데 시험 대신 세습제를 쓰지 않았기 때문에",
+            "나무의 높이가 너무 낮아 경쟁의 긴장감이 없기 때문에"
+          ],
+          answer: 1,
+          explanation: "나무를 탈 수 없는 물고기나 코끼리에게 나무 타기 시험을 똑같이 치르게 하는 것은 형식적 평등일 뿐, 실질적으로는 극도로 불공정한 경쟁입니다."
+        },
+        {
+          id: "S15_03", unit: "사회 정의", subTopic: "공정한 경쟁의 3대 조건",
+          passage: `공정한 경쟁이 이루어지기 위한 3대 조건:\n[1] 경쟁 규칙의 동등한 적용\n[2] 경쟁 참여 기회의 실질적 보장\n[3] (      ?      )`,
+          text: "빈칸 [3]에 들어갈 공정한 경쟁의 조건으로 가장 알맞은 것은?",
+          choices: [
+            "경쟁에서 뒤처진 사람에게도 최소한의 인간다운 삶을 지원하는 제도 마련",
+            "경쟁의 승자가 모든 보상과 권력을 독점하도록 보장",
+            "패배한 구성원에게 벌칙과 패널티를 부과하여 퇴출 유도",
+            "모든 참가자의 성적을 평균으로 맞추어 균등 분배",
+            "부모의 경제력을 점수화하여 가산점으로 인정"
+          ],
+          answer: 0,
+          explanation: "공정한 경쟁의 3대 조건은 동등한 규칙 적용, 실질적 기회 보장, 그리고 패배자에게도 패자부활의 기회와 최소한의 인간다운 삶을 보장하는 사회 안전망입니다."
+        },
+        {
+          id: "S15_04", unit: "사회 정의", subTopic: "공정한 경쟁의 3대 조건",
+          passage: `어느 TV 노래 경연 프로그램에서는 출연자의 외모나 나이, 유명세에 따른 편견을 배제하기 위해 가면을 씌우고 오직 목소리로만 실력을 평가하였다.`,
+          text: "가면을 씌운 조치가 추구한 공정한 경쟁의 취지는?",
+          choices: [
+            "외모나 학벌 등 본질과 무관한 선입견을 없애고 실력 자체로 공정하게 평가하기 위해",
+            "가수의 정체를 숨겨 방송 제작비를 아끼기 위해",
+            "노래 실력이 부족한 참가자에게 무조건 우승을 주기 위해",
+            "심사위원들의 심사 책임을 면제해주기 위해",
+            "음향 장비의 결함을 시청자들에게 감추기 위해"
+          ],
+          answer: 0,
+          explanation: "편견이나 배경 요소를 가리고 본질적 능력(가창력)만으로 평가받도록 출발선을 공정하게 맞춘 조치입니다."
+        }
+      ],
+
+      // Slot 16: 사회적 약자 배려 제도 (기초생활보장법, 장애인 의무고용, 여성할당제, 지역균형)
+      [
+        {
+          id: "S16_01", unit: "사회 정의", subTopic: "사회적 약자 배려 제도",
+          passage: `우리나라에서 시행하는 제도들:\n- 공공기관과 일정 규모 이상의 기업에 장애인을 의무적으로 고용하도록 하는 제도\n- 국회의원 비례대표 후보 추천 시 50% 이상을 여성에게 배정하는 제도\n- 교육 환경이 열악한 농어촌 학생들을 배려하여 대학 입학 정원의 일정 비율을 선발하는 제도`,
+          text: "이러한 제도들을 도입한 궁극적 이유로 가장 알맞은 것은?",
+          choices: [
+            "사회적 약자의 불리한 출발선을 보정하여 실질적 기회 균등과 사회 정의를 실현하기 위해",
+            "일반 구성원들에게 불이익을 주어 하향 평준화를 달성하기 위해",
+            "경쟁 자체를 완전히 없애고 무시험 추첨제를 정착시키기 위해",
+            "특정 이익 집단의 표를 얻기 위한 선심성 정책을 펴기 위해",
+            "국가 주도의 전체주의 통제 시스템을 완성하기 위해"
+          ],
+          answer: 0,
+          explanation: "장애인 의무고용, 여성할당제, 지역균형선발제는 구조적·환경적 불리함에 처한 약자들에게 실질적 기회를 보장하는 적극적 우대 조치입니다."
+        },
+        {
+          id: "S16_02", unit: "사회 정의", subTopic: "사회적 약자 배려 제도",
+          passage: `"국민기초생활보장법은 생활이 어려운 국민에게 생계, 교육, 의료, 주거 등에 필요한 급여를 지급하여 최저 생활을 보장하고 자립을 유도한다."`,
+          text: "이 법률이 구현하고자 하는 도덕적 가치는 무엇인가?",
+          choices: ["최소한의 인간다운 삶 보장", "무한 경쟁과 승자 독식", "사유재산권의 완전 폐지", "자유방임주의적 치안 국가", "선착순에 따른 복지 차등"],
+          answer: 0,
+          explanation: "국민기초생활보장법은 경쟁에서 낙오하거나 자립이 어려운 취약 계층의 '최소한의 인간다운 삶'을 지탱해 주는 안전망입니다."
+        },
+        {
+          id: "S16_03", unit: "사회 정의", subTopic: "사회적 약자 배려 제도",
+          passage: `일각에서는 지역균형선발제나 장애인 의무고용제에 대해 "오히려 다른 사람의 기회를 빼앗는 역차별이 아니냐"는 비판을 제기하기도 한다.`,
+          text: "이러한 논란에 대해 도덕적으로 가장 균형 잡힌 해결 방안은?",
+          choices: [
+            "약자 배려 제도를 즉시 영구 폐지하고 완전한 정글식 경쟁을 도입한다.",
+            "제도의 필요성을 사회적으로 공감하되, 일반 구성원의 역차별 불만을 완화할 합리적 기준과 보완책을 함께 모색한다.",
+            "모든 일반 시험을 폐지하고 100% 약자 우선 배정으로만 채운다.",
+            "약자들의 목소리를 법률적으로 차단하여 갈등을 덮는다.",
+            "기업과 대학이 자율적으로 약자를 배제할 수 있도록 방임한다."
+          ],
+          answer: 1,
+          explanation: "적극적 우대조치는 약자의 불리함을 해소하는 정의의 실현이지만, 그 과정에서 일반 국민의 역차별 정서도 세심하게 조율해야 합니다."
+        },
+        {
+          id: "S16_04", unit: "사회 정의", subTopic: "사회적 약자 배려 제도",
+          passage: `뉴욕 시장을 지낸 피오렐로 라과디아는 "모든 사람이 제대로 먹고 행복해지기 전에는 뉴욕이 진정한 부유한 도시라 할 수 없다"라며 빈민가의 학교와 병원을 확충했다.`,
+          text: "라과디아 시장의 행정에 담긴 도덕적 철학은?",
+          choices: [
+            "경제 성장률만을 최우선으로 삼는 성장 지상주의",
+            "사회적 약자의 편에 서서 정의와 복지를 실현하려는 실천적 의지",
+            "부유층에게 세금을 면제해 주는 친기업적 정책",
+            "사법부의 판결을 무시하고 독단적으로 도시를 지배하려는 독재관",
+            "시민들의 세금을 낭비하여 인기를 얻으려는 포퓰리즘"
+          ],
+          answer: 1,
+          explanation: "라과디아 시장은 소외된 빈민과 사회적 약자의 삶을 돌보는 것이 진정한 도시의 번영이자 정의임을 실천했습니다."
+        }
+      ],
+
+      // Slot 17: 부패의 어원과 발생 원인 (개인적 탐욕, 연고주의)
+      [
+        {
+          id: "S17_01", unit: "사회 정의", subTopic: "부패의 원인과 본질",
+          passage: `부패를 뜻하는 영어 'corruption'은 '함께(cor)'와 '파멸하다(rupt)'의 합성어로 사회 전체를 무너뜨린다는 뜻을 담고 있다. 한자 '부패(腐敗)' 역시 썩어서 무너진다는 의미이다.`,
+          text: "부패의 어원이 시사하는 바로 가장 적절한 것은?",
+          choices: [
+            "부패는 개인의 일탈일 뿐 사회 전체에는 아무런 영향이 없다.",
+            "부패는 사소해 보일지라도 방치하면 공동체 전체를 파멸에 이르게 한다.",
+            "부패는 경제 성장을 위해 일정 부분 필수적으로 허용되어야 한다.",
+            "부패는 강력한 법이 있으면 개인의 도덕성 없이도 완전히 예방된다.",
+            "부패는 국가 기관보다는 오직 민간인 사이에서만 발생하는 현상이다."
+          ],
+          answer: 1,
+          explanation: "부패의 어원은 썩어서 공동체 전체를 파멸로 몰고 간다는 엄중한 경고를 내포하고 있습니다."
+        },
+        {
+          id: "S17_02", unit: "사회 정의", subTopic: "부패의 원인과 본질",
+          passage: `고위 공직자 강 씨는 많은 빚을 진 상황에서 친분이 있는 전 씨에게 "돈을 주면 아들을 공기업에 취업시켜 주겠다"며 거액의 뇌물을 요구하여 두 사람 모두 구속되었다.`,
+          text: "위 사건에서 부패가 발생한 핵심 원인으로 옳은 것을 <보기>에서 고른 것은?\n<보기>\nㄱ. 개인의 부당한 물질적 탐욕과 이기심\nㄴ. 혈연·친분을 이용해 부당한 기회를 얻으려는 연고주의 관행\nㄷ. 사회적 약자를 배려하기 위한 제도적 장치의 미비\nㄹ. 국가 권력의 지나치게 과도한 청렴 검증 절차",
+          choices: ["ㄱ, ㄴ", "ㄴ, ㄷ", "ㄱ, ㄷ", "ㄷ, ㄹ", "ㄱ, ㄷ, ㄹ"],
+          answer: 0,
+          explanation: "개인의 그릇된 탐욕(ㄱ)과 혈연·지연·친분을 악용하는 연고주의 관행(ㄴ)이 부패의 양대 발생 원인입니다."
+        },
+        {
+          id: "S17_03", unit: "사회 정의", subTopic: "부패의 원인과 본질",
+          passage: `"지각생 확인 담당자인 철수에게 단짝 친구인 영수가 '한 번만 눈감아 줘. 우리는 절친이잖아'라며 청탁하였다."`,
+          text: "위 만화 상황에서 철수가 지녀야 할 바람직한 태도는?",
+          choices: [
+            "친구의 부탁이니 당연히 지각 명단에서 빼준다.",
+            "친구 관계와 공적 의무를 구분하여 규칙에 따라 공정하게 처리한다.",
+            "친구에게 빵을 사달라고 요구한 뒤 눈감아 준다.",
+            "담당자 역할을 다른 학생에게 떠넘기고 책임을 회피한다.",
+            "교실 밖으로 도망쳐 상황을 모면한다."
+          ],
+          answer: 1,
+          explanation: "사적 친분(연고주의)에 얽매이지 않고 공적 원칙과 규칙을 엄정하게 지키는 것이 청렴의 기본입니다."
+        },
+        {
+          id: "S17_04", unit: "사회 정의", subTopic: "부패의 원인과 본질",
+          passage: `설문조사 결과 청소년 중 일부가 "감옥에서 10년을 살아도 10억 원을 벌 수 있다면 부패를 저지르겠다"고 응답하여 사회적 충격을 주었다.`,
+          text: "이러한 설문 결과가 드러내는 우리 사회의 병폐는?",
+          choices: ["물질만능주의와 도덕성 불감증", "환경주의의 확산", "엄격한 법치주의에 대한 반발", "지나치게 높은 시민 의식", "나눔과 봉사 문화의 과잉"],
+          answer: 0,
+          explanation: "돈만 벌 수 있다면 수단과 방법을 가리지 않겠다는 생각은 물질만능주의와 도덕 불감증의 위험한 징후입니다."
+        }
+      ],
+
+      // Slot 18: 부패의 문제점과 예방책 (자한의 옥 거부, 청탁금지법, 공익신고 1398)
+      [
+        {
+          id: "S18_01", unit: "사회 정의", subTopic: "부패 예방과 청렴",
+          passage: `송나라의 자한에게 어떤 사람이 귀한 옥을 바치며 청탁을 부탁하자 자한은 거절하며 말했다.\n"나는 남의 물건에 욕심내지 않는 것을 보배로 여기고, 당신은 이 옥을 보배로 여기니 내가 받으면 우리 둘 다 보배를 잃게 됩니다."\n- <논어> 중에서 -`,
+          text: "자한의 행동이 보여주는 부패 예방의 자세로 가장 적절한 것은?",
+          choices: [
+            "탐욕을 버리고 마음의 청렴함을 목숨처럼 지키는 청렴 의식",
+            "더 비싼 금괴를 가져올 때까지 기다리는 영악함",
+            "상대방의 성의를 무시하는 무례하고 거만한 태도",
+            "국가 권력을 독점하여 다른 관리들을 통제하려는 야심",
+            "경제적 가치를 판단하지 못하는 어리석음"
+          ],
+          answer: 0,
+          explanation: "자한은 탐욕 없는 마음(청렴)을 최고의 보물로 삼아 뇌물을 단호히 거절하였습니다."
+        },
+        {
+          id: "S18_02", unit: "사회 정의", subTopic: "부패 예방과 청렴",
+          passage: `우리나라는 2016년부터 부정청탁 및 금품 수수를 근절하기 위해 '청탁금지법'을 시행하고 있으며, 국민권익위원회에서는 부패·공익신고 전화(1398)를 운영하고 있다.`,
+          text: "개인의 청렴 의식 외에 이러한 법률과 제도적 장치를 마련해야 하는 까닭은?",
+          choices: [
+            "개인의 도덕적 결단만으로는 구조적이고 은밀한 부패를 근절하는 데 한계가 있기 때문에",
+            "공무원들의 사생활을 24시간 감시하여 권력을 빼앗기 위해",
+            "모든 선물과 교류를 금지시켜 내수 시장을 위축시키기 위해",
+            "신고자에게 벌금을 부과하여 국가 세정을 확충하기 위해",
+            "전통적인 정(情) 문화를 말살하기 위해"
+          ],
+          answer: 0,
+          explanation: "부패 척결은 개인의 마음가짐뿐 아니라 엄정한 처벌과 신고자 보호 등 '제도적 예방책'이 뒷받침되어야 합니다."
+        },
+        {
+          id: "S18_03", unit: "사회 정의", subTopic: "부패 예방과 청렴",
+          passage: `조선 시대에는 청렴결백하고 직무 수행 능력이 우수한 관리에게 '청백리(淸白吏)' 칭호를 부여하여 백성의 모범으로 삼았다.`,
+          text: "오늘날 청백리 정신을 계승하는 공직자의 모습으로 가장 알맞은 것은?",
+          choices: [
+            "공직을 이용해 친인척에게 관급 공사를 몰아준다.",
+            "공적인 업무를 사적인 이익보다 우선하고 투명하게 집행한다.",
+            "민원인으로부터 명절 떡값과 골프 접대를 자연스럽게 받는다.",
+            "퇴직 후 자신이 감독하던 유관 기업의 임원으로 취업한다.",
+            "감사 기관의 적발을 피하기 위해 회계 장부를 이중으로 작성한다."
+          ],
+          answer: 1,
+          explanation: "청백리는 사욕을 멀리하고 국가와 국민을 위해 공정하고 깨끗하게 봉사하는 참된 공직자상입니다."
+        },
+        {
+          id: "S18_04", unit: "사회 정의", subTopic: "부패 예방과 청렴",
+          passage: `국제투명성기구(TI)에서 매년 발표하는 부패인식지수(CPI)가 낮은 국가는 대외 신인도가 하락하여 외국인 투자가 줄어들고 국가 경쟁력이 약화된다.`,
+          text: "위 사실이 말해주는 부패의 사회적 폐해는 무엇인가?",
+          choices: [
+            "부패는 사회적 신뢰를 파괴하고 국가 전체의 발전과 번영을 가로막는다.",
+            "부패가 많을수록 행정 처리가 신속해져 경제가 부흥한다.",
+            "부패는 국제기구의 지표 조작일 뿐 실제 경제와는 무관하다.",
+            "부패가 심한 나라일수록 빈부격차가 완화된다.",
+            "부패는 개발도상국에서만 나타나고 선진국에는 존재하지 않는다."
+          ],
+          answer: 0,
+          explanation: "부패는 공정성을 해칠 뿐 아니라 국가의 대외 신뢰도와 경제적 성장을 갉아먹는 치명적인 장애물입니다."
+        }
+      ],
+
+      // Slot 19: 북한을 바라보는 이중적 시각 (경계 vs 협력)
+      [
+        {
+          id: "S19_01", unit: "북한 이해", subTopic: "북한을 바라보는 이중적 시각",
+          passage: `(가) 연평도 포격과 천안함 피격, 목함 지뢰 도발 등 끊임없는 군사적 공격으로 국민의 생명을 위협하는 북한\n(나) 금강산에서 눈물을 흘리며 65년 만에 손을 맞잡고 혈육의 정을 나누는 이산가족 상봉의 북한 동포`,
+          text: "위 (가)와 (나)를 통해 알 수 있는 북한의 성격으로 가장 적절한 것은?",
+          choices: [
+            "안보 차원의 '경계 대상'이자, 평화 통일을 함께 이룰 '협력 대상'인 이중적 존재",
+            "우리가 어떠한 대화를 시도해서도 안 되는 영원한 적대국",
+            "우리의 국가 안보를 전혀 위협하지 않는 순수한 우방국",
+            "다른 외국과 완전히 똑같은 아무런 역사적 특수성이 없는 외국",
+            "남한이 무력으로 정복하여 강제 통합해야 할 식민지 대상"
+          ],
+          answer: 0,
+          explanation: "북한은 군사적 대립 상태에서 경계해야 할 안보 대상인 동시에, 민족 공동체 회복을 위해 함께 대화하고 협력해야 할 이중적 상대입니다."
+        },
+        {
+          id: "S19_02", unit: "북한 이해", subTopic: "북한을 바라보는 이중적 시각",
+          passage: `북한의 핵 실험 소식을 접했을 때와 이산가족들이 헤어지며 오열하는 뉴스를 보았을 때 국민들의 마음속에는 상반된 감정이 교차한다.`,
+          text: "북한을 한쪽 시각에만 치우쳐 바라볼 때 생기는 문제점으로 옳지 않은 것은?",
+          choices: [
+            "북한을 오직 협력의 대상으로만 보면 국가 안보가 위태로워질 수 있다.",
+            "북한을 오직 경계의 대상으로만 보면 평화적 대화와 화해의 기회를 놓칠 수 있다.",
+            "북한에 대한 균형 있는 시각을 가지면 평화 통일의 기반을 지혜롭게 닦을 수 있다.",
+            "북한의 군사적 도발을 무조건 온정주의로 덮어주는 것이 참된 평화 통일의 지름길이다.",
+            "상반된 현실을 모두 직시해야 호혜적인 남북 관계를 발전시킬 수 있다."
+          ],
+          answer: 3,
+          explanation: "도발에 대한 원칙적이고 확고한 안보 대비 없이 무조건 감싸는 온정주의는 국민의 생명을 위험에 빠뜨릴 수 있습니다."
+        },
+        {
+          id: "S19_03", unit: "북한 이해", subTopic: "북한을 바라보는 이중적 시각",
+          passage: `남북 분단은 1945년 광복 후 38도선 분할 점령, 모스크바 3국 외상회의 신탁통치 논쟁, 1948년 남북 단독정부 수립, 그리고 1950년 6·25 전쟁을 거치며 고착화되었다.`,
+          text: "분단의 역사적 배경에 대한 이해로 적절하지 않은 것은?",
+          choices: [
+            "미국과 소련의 냉전 구도와 한반도 분할 점령이 분단의 외적 배경이었다.",
+            "신탁통치에 대한 찬반 대립 등 민족 내부의 이념 갈등도 영향을 미쳤다.",
+            "북한 정권의 기습 남침으로 발발한 6·25 전쟁은 분단의 적대감을 돌이킬 수 없이 심화시켰다.",
+            "남북 분단은 우리 민족 전체가 자발적인 국민투표로 합의하여 결정한 것이다.",
+            "전쟁의 상흔과 휴전선은 오늘날까지도 이산가족의 비극을 낳고 있다."
+          ],
+          answer: 3,
+          explanation: "남북 분단은 강대국의 냉전과 이념 대립, 북한의 남침 전쟁으로 인한 비극이며 결코 민족의 자발적 합의가 아니었습니다."
+        },
+        {
+          id: "S19_04", unit: "북한 이해", subTopic: "북한을 바라보는 이중적 시각",
+          passage: `어느 학생의 고백: "북한 정권의 무모한 미사일 발사를 보면 분노가 치밀지만, 굶주리는 북한 아이들이나 탈북민들의 사연을 들으면 가슴이 먹먹합니다."`,
+          text: "이 학생의 태도에서 배울 수 있는 바람직한 북한 이해의 자세는?",
+          choices: [
+            "북한 정권의 안보 위협과 북한 주민의 인도적 현실을 분리하여 균형 있게 파악한다.",
+            "북한 주민 전체를 적으로 규정하고 모든 교류를 단절한다.",
+            "북한 정권의 미사일 도발도 민족적 자긍심으로 칭찬한다.",
+            "통일 문제에 아예 관심을 끄고 일상생활에만 전념한다.",
+            "군사적 방어력을 약화시켜 북한의 선의를 유도한다."
+          ],
+          answer: 0,
+          explanation: "호전적인 북한 지배 체제에 대한 단호한 안보 경계와, 억압받는 북한 주민 동포에 대한 인도주의적 배려는 분리되어 균형을 이루어야 합니다."
+        }
+      ],
+
+      // Slot 20: 북한을 이해하는 3대 바람직한 자세 (균형, 객관적 사실, 보편적 가치)
+      [
+        {
+          id: "S20_01", unit: "북한 이해", subTopic: "북한 이해의 3대 자세",
+          passage: `도덕 교과서에서는 북한을 올바르게 이해하기 위한 세 가지 기본자세로 [1] 균형 있는 이해, [2] 객관적 사실에 기초한 이해, [3] (   ?   )에 근거한 이해를 제시한다.`,
+          text: "빈칸에 들어갈 내용으로 가장 적절한 것은?",
+          choices: ["보편적 가치", "상업적 이익", "체제 우월성", "감상주의", "군사적 압도"],
+          answer: 0,
+          explanation: "인간 존엄성, 자유, 인권, 평화와 같은 '보편적 가치'에 근거하여 북한을 바라보아야 도덕적이고 올바른 판단을 내릴 수 있습니다."
+        },
+        {
+          id: "S20_02", unit: "북한 이해", subTopic: "북한 이해의 3대 자세",
+          passage: `"북한을 막연히 무서운 악마의 집단으로만 보거나, 반대로 아무런 문제가 없는 지상낙원으로 미화하는 태도는 모두 바람직하지 않다. 대내외적 환경과 실상을 있는 그대로 보아야 한다."`,
+          text: "위 글이 강조하는 북한 이해의 자세는?",
+          choices: ["객관적 사실에 기초한 이해", "주관적 감상에 따른 이해", "정치적 선전에 의존한 이해", "외국 언론의 보도 맹종", "무조건적 비판과 폄하"],
+          answer: 0,
+          explanation: "주관적 편견이나 감정에 휘둘리지 않고 있는 그대로의 팩트를 직시하는 것은 '객관적 사실에 기초한 이해'입니다."
+        },
+        {
+          id: "S20_03", unit: "북한 이해", subTopic: "북한 이해의 3대 자세",
+          passage: `판문점은 1953년 7월 정전협정이 체결된 곳으로, 불과 수 미터 간격으로 남북 군인이 마주 서 있다.`,
+          text: "판문점이 우리에게 던져주는 상징적 의미로 가장 적합한 것은?",
+          choices: [
+            "남북 분단의 뼈아픈 비극과 긴장, 그리고 평화적 대화의 필요성을 동시에 증언하는 현장",
+            "남북 간의 무력충돌이 영원히 해결 불가능함을 선언하는 장소",
+            "외국인 관광객들에게 입장료를 벌어들이는 단순한 상업 관광지",
+            "남북한의 체제가 완전히 동일해졌음을 입증하는 기념관",
+            "모든 국방력을 해체해도 안전하다는 것을 보여주는 평화 구역"
+          ],
+          answer: 0,
+          explanation: "판문점은 분단의 상처와 군사적 대치, 동시에 평화 회담이 열리는 상징적 공간입니다."
+        },
+        {
+          id: "S20_04", unit: "북한 이해", subTopic: "북한 이해의 3대 자세",
+          passage: `북한의 심각한 인권 유린과 공개 처형, 정치범 수용소 실태를 비판할 때, 우리는 '내정 간섭'이라는 변명을 넘어 인류 공동의 기준을 적용해야 한다.`,
+          text: "이때 적용되는 '인류 공동의 도덕적 기준'은?",
+          choices: [
+            "인간 존엄성과 자유, 생명권을 중시하는 보편적 가치",
+            "동북아시아의 군비 경쟁 논리",
+            "승자 독식의 자본주의 시장 논리",
+            "특정 정당의 정권 안보 논리",
+            "혈연 중심의 폐쇄적 가족주의"
+          ],
+          answer: 0,
+          explanation: "인권과 생명권은 국경을 초월하여 보장되어야 하는 인류의 '보편적 가치'입니다."
+        }
+      ],
+
+      // Slot 21: 보편적 가치 관점의 북한 주민 실상 (정치 통제, 장마당, 집단주의, 생활총화)
+      [
+        {
+          id: "S21_01", unit: "북한 이해", subTopic: "북한 주민의 실제 생활",
+          passage: `북한 지방선거 투표장에서는 후보자 1명만 단독 출마한 상태에서 찬성자는 그대로 투표함에 넣고, 반대자는 별도의 붉은 상자에 넣도록 통제받으며 찬성률 100%를 기록한다.`,
+          text: "위 사례를 통해 알 수 있는 북한의 정치 현실에 대한 비판으로 가장 적절한 것은?",
+          choices: [
+            "비밀선거나 자유선거 등 민주주의의 기본 원칙이 보장되지 않고 당의 통제만 존재한다.",
+            "선거 관리 비용이 너무 적게 들어 효율적인 선거 제도이다.",
+            "복수 정당이 자유롭게 경쟁하여 국민의 주권이 훌륭하게 실현되고 있다.",
+            "국민들의 정치적 만족도가 세계에서 가장 높은 모범 민주국가이다.",
+            "투표 시간이 너무 길어서 주민들의 생업에 큰 지장을 주고 있다."
+          ],
+          answer: 0,
+          explanation: "후보 단독 출마와 공개 찬반 투표는 시민의 자유로운 선택권과 비밀선거 원칙을 침해하는 전체주의 독재입니다."
+        },
+        {
+          id: "S21_02", unit: "북한 이해", subTopic: "북한 주민의 실제 생활",
+          passage: `북한 사회의 기본 원칙은 "하나는 전체를 위하여, 전체는 하나를 위하여"이다. 주민들은 소년단, 청년동맹, 직장 조직 등을 통해 평생 정치사상 교육을 받고, 매주 토요일 자신의 일주일을 반성하는 '생활총화'에 의무적으로 참여한다.`,
+          text: "위 지문에서 나타난 북한 사회생활의 특징은?",
+          choices: ["개인주의와 자율성 존중", "집단주의 원칙과 철저한 조직 통제", "자유로운 다문화 사회", "종교의 자유 보장", "소비자 중심의 시장 문화"],
+          answer: 1,
+          explanation: "북한 주민은 집단주의 원칙 아래 소년단 시절부터 평생 조직에 얽매여 생활총화 등의 사상 통제를 받습니다."
+        },
+        {
+          id: "S21_03", unit: "북한 이해", subTopic: "북한 주민의 실제 생활",
+          passage: `1990년대 중반 북한의 극심한 경제난(고난의 행군)으로 국가 배급망이 마비되자, 주민들은 먹고살기 위해 스스로 시장을 형성하였다. 이곳을 '장마당'이라 부르며 생필품과 곡물을 거래한다.`,
+          text: "북한 '장마당'의 확산이 갖는 사회경제적 의미로 옳은 것은?",
+          choices: [
+            "사회주의 계획경제의 붕괴 속에서 주민들의 자생적 시장경제 요소가 자리 잡고 있다.",
+            "국가 주도의 무상 배급 제도가 완벽하게 정상화되었음을 보여준다.",
+            "외국인들의 호화 사치품 쇼핑몰로 변모하였다.",
+            "북한 당국이 자본주의 경제로의 전면적인 민주화 개혁을 공식 선포하였다.",
+            "북한 주민들이 농업을 완전히 포기하고 공업으로만 전환하였다."
+          ],
+          answer: 0,
+          explanation: "장마당은 배급제 마비 이후 북한 주민들이 생존을 위해 일구어낸 비공식 시장경제의 핵심 현상입니다."
+        },
+        {
+          id: "S21_04", unit: "북한 이해", subTopic: "북한 주민의 실제 생활",
+          passage: `북한의 은어들:\n- '가루밥': 강냉이 가루를 섞어 지은 밥\n- '꽃제비': 일정한 거처 없이 먹을 것을 찾아 구걸하는 어린이\n- '무상의료 제도': 병원, 의사, 약 세 가지가 없다는 것을 비꼰 말\n- '백암(아오지) 간다': 외딴 산골로 추방되어 강제 노역하는 것`,
+          text: "위 은어들을 통해 확인할 수 있는 북한의 어두운 실상은?",
+          choices: [
+            "식량난과 보건 의료의 붕괴, 정치적 억압과 심각한 아동 인권 침해",
+            "주민 복지 시설의 현대화와 무상 의료의 대성공",
+            "자유로운 언론 출판의 자유와 창의적 문화생활",
+            "친환경 유기농 식단의 확산과 여가 생활의 다양화",
+            "청소년 보호 시설의 완벽한 국가 책임제"
+          ],
+          answer: 0,
+          explanation: "꽃제비, 가루밥, 아오지 추방 등의 은어는 북한의 만성적인 식량난과 인권 탄압, 무상치료제의 허구를 생생하게 드러냅니다."
+        }
+      ],
+
+      // Slot 22: 북한 이탈 주민의 3대 어려움 및 통일 과제 (먼저 온 미래)
+      [
+        {
+          id: "S22_01", unit: "북한 이해", subTopic: "북한 이탈 주민의 적응과 과제",
+          passage: `남한에 입국한 북한 이탈 주민이 3만 명을 넘어섰다. 영화 <크로싱>의 주인공처럼 가족과 생이별한 채 탈북한 이들은 고향에 두고 온 가족에 대한 죄책감, 남한 사람들의 편견 어린 시선 속에서 큰 스트레스를 받는다.`,
+          text: "위 사례에서 북한 이탈 주민이 겪는 어려움의 유형은?",
+          choices: ["심리적 어려움", "체력적 한계", "종교적 갈등", "지리적 고립", "정치적 박탈"],
+          answer: 0,
+          explanation: "탈북 과정의 공포, 가족에 대한 그리움과 미안함, 편견으로 인한 불안감은 '심리적 어려움'에 해당합니다."
+        },
+        {
+          id: "S22_02", unit: "북한 이해", subTopic: "북한 이탈 주민의 적응과 과제",
+          passage: `북한 출신 학생이 남한 학교에 전학 와서 선생님에게 "선생님, 지난번 선생님과 참 근사하십니다!"라고 말했다. 남한에서는 '근사하다'가 '멋지다'이지만, 북한에서는 '서로 닮았다(비슷하다)'라는 뜻이어서 오해가 빚어졌다.`,
+          text: "위 상황이 보여주는 북한 이탈 주민의 정착 어려움은?",
+          choices: ["문화와 언어 차이에서 오는 이질화의 어려움", "경제적 빈곤의 어려움", "신체 건강상의 어려움", "법적 신분 보장의 어려움", "기후 변화에 따른 적응 어려움"],
+          answer: 0,
+          explanation: "오랜 분단으로 남북한의 어휘와 생활양식이 달라져 겪는 '문화적·언어적 어려움'입니다."
+        },
+        {
+          id: "S22_03", unit: "북한 이해", subTopic: "북한 이탈 주민의 적응과 과제",
+          passage: `북한 이탈 주민을 가리켜 학자들은 '먼저 온 미래', '통일의 시험대', '통일 사다리'라고 부른다.`,
+          text: "북한 이탈 주민을 이렇게 부르는 이유로 가장 타당한 것은?",
+          choices: [
+            "그들이 남한 사회에 안정적으로 정착하는 과정을 통해 미래 남북 통합의 갈등을 예측하고 대비할 수 있기 때문에",
+            "그들이 남한의 경제적 부를 모두 북한으로 송금해야 하기 때문에",
+            "그들에게만 특별한 참정권을 두 배로 주어야 하기 때문에",
+            "그들이 통일 한국의 초대 대통령으로 자동 선출되기 때문에",
+            "그들이 북한과의 무력 전쟁에서 최선봉에 서야 하기 때문에"
+          ],
+          answer: 0,
+          explanation: "탈북민의 정착과 포용은 장차 통일 후 겪게 될 사회문화적 통합을 미리 준비하는 중요한 거울이자 디딤돌이 됩니다."
+        },
+        {
+          id: "S22_04", unit: "북한 이해", subTopic: "북한 이탈 주민의 적응과 과제",
+          passage: `북한 이탈 주민들이 겪는 경제적 어려움을 해소하기 위해 정부와 사회가 기울여야 할 노력으로 가장 적절한 것은?`,
+          choices: [
+            "무조건 평생 동안 일하지 않아도 되는 현금만 지급한다.",
+            "직업 훈련 교육과 취업 지원을 강화하여 스스로 자립할 수 있는 경제적 역량을 길러준다.",
+            "남한 주민들과 격리된 특정 수용 시설에서만 생활하도록 규제한다.",
+            "북한 출신이라는 이유로 전문직 자격증 취득을 법으로 금지한다.",
+            "일자리를 주되 남한 근로자의 절반 이하 임금만 주도록 강제한다."
+          ],
+          answer: 1,
+          explanation: "직업 훈련과 창업 지원, 사회적응 교육을 통해 스스로 일어서서 당당한 사회 구성원이 되도록 돕는 것이 진정한 자립 지원입니다."
+        }
+      ],
+
+      // Slot 23: 통일을 해야 하는 도덕적 근거 (인도주의, 보편적 가치, 민족공동체)
+      [
+        {
+          id: "S23_01", unit: "통일 윤리", subTopic: "통일의 도덕적 근거",
+          passage: `6·25 전쟁으로 헤어져 56년 만에 어머니를 상봉했던 북한의 조주경 교수는 어머니보다 먼저 세상을 떠났다. 그가 어머니에게 남긴 편지에는 "불쌍한 나의 어머니, 통일을 그토록 빌던 어머니의 모습이 지워지지 않습니다"라는 애절한 그리움이 담겨 있었다.`,
+          text: "이 사례가 웅변하는 '통일을 해야 하는 도덕적 근거'는?",
+          choices: [
+            "이산가족과 실향민의 천륜을 잇고 고통을 해소하는 인도주의 실현",
+            "북한의 풍부한 지하자원을 개발하여 얻는 산업적 이익",
+            "한반도 군사력을 증강하여 대륙을 정복하려는 팽창주의",
+            "주변 강대국들의 눈치를 보지 않기 위한 자주국방",
+            "동계 올림픽 단일팀 구성을 통한 메달 획득"
+          ],
+          answer: 0,
+          explanation: "이산가족의 한과 아픔을 치유하는 것은 인간으로서 당연히 추구해야 할 '인도주의 실현'의 도덕적 근거입니다."
+        },
+        {
+          id: "S23_02", unit: "통일 윤리", subTopic: "통일의 도덕적 근거",
+          passage: `분단 상태가 80년, 100년 지속된다면 남과 북은 언어, 사고방식, 전통문화가 완전히 달라져 영원히 다른 민족으로 갈라지게 될 것이다.`,
+          text: "위 글에서 강조하는 통일의 필요성은?",
+          choices: ["민족 공동체의 동질성 회복과 역사 계승", "해외 관광객 유치 확대", "외국인 노동자의 대체 효과", "수출입 무역 흑자 달성", "군 복무 기간의 단축"],
+          answer: 0,
+          explanation: "오랜 역사 동안 하나의 핏줄과 문화를 공유해 온 한민족의 문화적·역사적 동질성을 지키고 회복하기 위해 통일이 필요합니다."
+        },
+        {
+          id: "S23_03", unit: "통일 윤리", subTopic: "통일의 도덕적 근거",
+          passage: `남한의 숭례문과 북한의 대동문, 남한의 전주 한옥마을과 북한의 개성 한옥마을, 성덕대왕신종과 연복사종.`,
+          text: "위의 남북 문화재를 통해 알 수 있는 사실로 가장 적절한 것은?",
+          choices: [
+            "남과 북은 분단 이전 수천 년 동안 하나의 역사와 전통을 공유해 온 문화 공동체이다.",
+            "북한의 전통문화는 남한의 문화와 근본적으로 다른 외래 문화이다.",
+            "남북 문화재는 경제적 가치가 전혀 없으므로 보존할 필요가 없다.",
+            "북한의 문화재는 모두 모조품이므로 유네스코 등재가 불가능하다.",
+            "남북이 통일되더라도 문화적 통합은 절대 불가능하다."
+          ],
+          answer: 0,
+          explanation: "남북한의 닮은꼴 문화재들은 우리가 본래 한 뿌리에서 출발한 단일 민족 문화 공동체임을 뚜렷하게 증명합니다."
+        },
+        {
+          id: "S23_04", unit: "통일 윤리", subTopic: "통일의 도덕적 근거",
+          passage: `통일은 북한 주민들에게 거주 이전의 자유, 언론·출판의 자유, 굶주리지 않을 권리를 찾아주어 인간 존엄성을 회복시키는 과정이다.`,
+          text: "이 진술이 담고 있는 통일의 가치는?",
+          choices: ["보편적 인권과 자유의 실현", "부동산 개발 이익의 독점", "주변국과의 군비 경쟁 승리", "북한 주민에 대한 차별적 통제", "폐쇄적 고립주의 추구"],
+          answer: 0,
+          explanation: "북한 동포들에게 인간다운 삶과 기본적 자유를 되찾아주는 것은 보편적 인권 실현이라는 숭고한 가치를 가집니다."
+        }
+      ],
+
+      // Slot 24: 통일 비용 vs 분단 비용 vs 통일 편익
+      [
+        {
+          id: "S24_01", unit: "통일 윤리", subTopic: "통일 비용과 통일 편익",
+          passage: `통일을 걱정하는 사람들은 도로 건설이나 체제 통합에 들어갈 (가)통일 비용을 염려한다. 그러나 분단 상태를 유지하기 위해 매년 허공에 날리는 막대한 국방비, 안보 불안 등 (나)분단 비용이 훨씬 소모적이며, 통일 후 지속적으로 창출될 (다)통일 편익은 통일 비용보다 훨씬 크다.`,
+          text: "(가), (나), (다)의 성격에 대한 설명으로 옳은 것은?",
+          choices: [
+            "(가)통일 비용은 영구히 사라지는 소모적 비용이다.",
+            "(나)분단 비용은 한시적으로만 발생하고 소멸하는 투자금이다.",
+            "(가)통일 비용은 미래의 막대한 번영을 창출하기 위한 '투자 비용'의 성격을 갖는다.",
+            "(다)통일 편익은 통일 비용보다 훨씬 적어 경제적으로 심각한 손해를 입힌다.",
+            "(나)분단 비용은 통일이 된 이후에도 계속 지출해야 하는 비용이다."
+          ],
+          answer: 2,
+          explanation: "통일 비용은 한시적이며 미래 성장을 위한 '투자'인 반면, 분단 비용은 끝없이 사라지는 소모적 비용이고, 통일 편익은 지속적으로 발생하여 비용을 훨씬 능가합니다."
+        },
+        {
+          id: "S24_02", unit: "통일 윤리", subTopic: "통일 비용과 통일 편익",
+          passage: `통일 한국이 누리게 될 경제적 효과:\n- 북한에 매장된 약 6,000조 원 규모의 희토류, 철광석, 마그네사이트 등 지하자원 활용\n- 남한의 첨단 기술과 북한의 노동력 결합\n- 유라시아 횡단철도(TKR) 연결을 통한 동북아 물류 허브 도약`,
+          text: "위 내용이 설명하는 개념으로 가장 적합한 것은?",
+          choices: ["통일 편익", "분단 비용", "국방 소모비", "체제 갈등 비용", "금융 제재 비용"],
+          answer: 0,
+          explanation: "통일로 인해 창출되는 경제적·산업적 혜택과 이익의 총합을 '통일 편익'이라고 부릅니다."
+        },
+        {
+          id: "S24_03", unit: "통일 윤리", subTopic: "통일 비용과 통일 편익",
+          passage: `코리아 디스카운트(Korea Discount)란 한반도의 전쟁 위험과 안보 불안 때문에 한국 기업과 국가의 신용등급이 실제 가치보다 저평가받는 현상이다.`,
+          text: "통일이 이루어졌을 때 코리아 디스카운트와 관련하여 나타날 변화는?",
+          choices: [
+            "전쟁 위험이 완전히 해소되어 국가 신용도가 급상승하고 외국인 투자가 활성화된다.",
+            "안보 불안이 심화되어 주식 시장이 폭락한다.",
+            "외국 기업들이 한국 지사를 전면 철수한다.",
+            "수출길이 막혀 무역 수지가 적자로 돌아선다.",
+            "환율이 폭등하여 국가 부도 위기에 직면한다."
+          ],
+          answer: 0,
+          explanation: "통일은 한반도의 군사적 리스크를 근원적으로 해소하여 국가와 기업의 신용등급을 획기적으로 상승시킵니다."
+        },
+        {
+          id: "S24_04", unit: "통일 윤리", subTopic: "통일 비용과 통일 편익",
+          passage: `"통일 비용이 두려워 통일을 미루는 것은, 병원 치료비가 아까워 암 덩어리를 몸속에 계속 키우는 것과 같다."`,
+          text: "위 비유가 전달하고자 하는 도덕적·경제적 교훈은?",
+          choices: [
+            "분단 비용의 누적을 끊어내고 미래의 더 큰 통일 편익을 위해 적극적으로 준비해야 한다.",
+            "치료비가 없으면 병원에 가지 않는 것이 현명하다.",
+            "분단 상태를 영구히 유지하는 것이 경제적으로 가장 이득이다.",
+            "통일 비용은 전액 주변 강대국에 청구해야 한다.",
+            "국방비를 두 배로 늘려 전쟁을 통해 문제를 해결해야 한다."
+          ],
+          answer: 0,
+          explanation: "끝없이 낭비되는 분단 비용을 중단하고 미래 투자인 통일을 능동적으로 실현해야 함을 강조하는 말입니다."
+        }
+      ],
+
+      // Slot 25: 통일 한국의 바람직한 미래상 및 평화 통일의 자세 (백범 김구, 독일 vs 베트남)
+      [
+        {
+          id: "S25_01", unit: "통일 윤리", subTopic: "통일 한국의 미래상과 평화 통일",
+          passage: `"나는 우리나라가 세계에서 가장 아름다운 나라가 되기를 원한다. 가장 부강한 나라를 원하는 것이 아니다. 우리의 군사력은 남의 침략을 막을 만하면 족하다. 오직 한없이 가지고 싶은 것은 높은 문화의 힘이다. 문화의 힘은 우리 자신을 행복하게 하고 나아가 남에게 행복을 주기 때문이다."\n- 김구, <백범일지> 중에서 -`,
+          text: "백범 김구 선생이 제시한 바람직한 국가의 미래상에 대한 설명으로 가장 적절한 것은?",
+          choices: [
+            "주변 나라를 군사력으로 침략하고 지배하는 군사 대국",
+            "세계 최고의 경제력으로 타국을 굴복시키는 패권 국가",
+            "자유와 인간 존엄성을 꽃피우고 높은 문화의 힘으로 세계 평화에 기여하는 문화 국가",
+            "다른 나라와의 교류를 일체 거부하는 쇄국 국가",
+            "물질적 사치와 향락을 최고의 미덕으로 삼는 자본 국가"
+          ],
+          answer: 2,
+          explanation: "백범 김구 선생은 침략이나 패권이 아니라, '높은 문화의 힘'으로 인류를 행복하게 만드는 평화로운 문화 국가를 꿈꾸었습니다."
+        },
+        {
+          id: "S25_02", unit: "통일 윤리", subTopic: "통일 한국의 미래상과 평화 통일",
+          passage: `1975년 베트남은 무력으로 남베트남을 정복하여 통일을 이루었으나, 보복과 사상 교육, 수용소 감금으로 수많은 보트피플(난민)이 발생하였다. 반면 독일은 주변국을 평화적으로 설득하고 다름을 포용하여 유럽 통합과 평화의 중심국이 되었다.`,
+          text: "베트남과 독일의 통일 방식 비교가 한반도에 주는 교훈으로 가장 적절한 것은?",
+          choices: [
+            "무력을 동원한 통일은 구성원의 삶을 파괴하므로 반드시 평화적 방식으로 통일을 이루어야 한다.",
+            "독일 통일처럼 복잡한 과정보다는 베트남처럼 무력으로 단숨에 끝내는 것이 효율적이다.",
+            "통일 후 남한 주민들만을 위해 북한 주민 전원을 수용소에 격리해야 한다.",
+            "통일 과정에서 주변 국가들의 지지나 협력은 전혀 필요하지 않다.",
+            "평화 통일을 하려면 우리 군대를 먼저 완전히 해산해야 한다."
+          ],
+          answer: 0,
+          explanation: "베트남의 무력 통일 비극과 독일의 평화 통일 성공은 '통일의 과정 또한 반드시 평화적이어야 함'을 분명히 증명합니다."
+        },
+        {
+          id: "S25_03", unit: "통일 윤리", subTopic: "통일 한국의 미래상과 평화 통일",
+          passage: `통일 한국이 지향해야 할 5대 바람직한 미래상:\n1. 인간 존엄성 보장\n2. 자유 민주주의 체제 정립\n3. 자유로운 경제 활동 보장\n4. 민족 문화의 진취적 발전\n5. (     ?     )`,
+          text: "5번에 들어갈 미래상으로 가장 알맞은 것은?",
+          choices: ["세계 평화 지향", "핵무기 독점 보유", "단일 혈통의 순혈주의", "폐쇄적 통제 경제", "주변국에 대한 군사적 보복"],
+          answer: 0,
+          explanation: "통일 한국은 한반도의 긴장을 없애고 동북아와 지구촌의 공동 번영에 이바지하는 '세계 평화 지향 국가'여야 합니다."
+        },
+        {
+          id: "S25_04", unit: "통일 윤리", subTopic: "통일 한국의 미래상과 평화 통일",
+          passage: `평화 통일을 이루기 위해 우리가 지녀야 할 자세로 도덕 교과서는 '다름을 인정하고 포용하는 자세', '단계적으로 교류·협력하는 자세', '화해와 공동 번영을 추구하는 자세'를 강조한다.`,
+          text: "이에 부합하는 실천적 행동으로 가장 적절한 것은?",
+          choices: [
+            "남북 간 이질감을 극복하기 위해 언어·역사·예술 등 공감할 수 있는 분야부터 차근차근 교류의 폭을 넓힌다.",
+            "북한의 문화와 억양을 열등한 것으로 규정하고 조롱한다.",
+            "통일 즉시 북한의 모든 전통문화 유산을 남한식으로 강제 개조한다.",
+            "신뢰가 형성되지 않았더라도 일시에 모든 정치적 통합을 졸속 추진한다.",
+            "주변 국가들과의 외교 관계를 단절하고 폐쇄적 민족주의를 표방한다."
+          ],
+          answer: 0,
+          explanation: "서로 다른 문화를 포용하며 언어·역사·문화·체육 등 공감하기 쉬운 분야부터 단계적으로 협력해 나가는 것이 평화 통일의 정석입니다."
+        }
+      ]
+    ];
+
+    // Generates 25 questions by taking 1 unique question from each of the 25 distinct slot arrays
+    function generateEthicsExamPaper() {
+      try {
+        let recentHistory = [];
+        try {
+          const savedHist = safeStorage.getItem('ethics_recent_question_ids');
+          if (savedHist) recentHistory = JSON.parse(savedHist);
+        } catch (e) {}
+
+        const currentExamIds = [];
+        const exam25 = [];
+
+        for (let slotIndex = 0; slotIndex < 25; slotIndex++) {
+          const slotQuestions = SLOT_MATRIX[slotIndex];
+          // Filter out questions used in the last 2-3 exams
+          let candidates = slotQuestions.filter(q => !recentHistory.includes(q.id));
+          if (candidates.length === 0) {
+            candidates = slotQuestions; // Fallback if all 4 were used in history
+          }
+          const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+          currentExamIds.push(chosen.id);
+
+          // Shuffle 5 choices to ensure random answer position (①~⑤)
+          const shuffled = shuffleChoices(chosen.choices, chosen.answer);
+          exam25.push({
+            ...chosen,
+            qNum: slotIndex + 1,
+            choices: shuffled.choices,
+            answer: shuffled.answerIndex
+          });
+        }
+
+        // Save last 50 question IDs in safeStorage to guarantee zero repetition across 4~5 exams
+        const updatedHistory = [...currentExamIds, ...recentHistory].slice(0, 75);
+        try {
+          safeStorage.setItem('ethics_recent_question_ids', JSON.stringify(updatedHistory));
+        } catch (e) {}
+
+        return exam25;
+
+      } catch (err) {
+        console.error("Ethics Exam generation fallback:", err);
+        return SLOT_MATRIX.map((slot, idx) => {
+          const q = slot[0];
+          const shuffled = shuffleChoices(q.choices, q.answer);
+          return {
+            ...q,
+            qNum: idx + 1,
+            choices: shuffled.choices,
+            answer: shuffled.answerIndex
+          };
+        });
+      }
+    }
+
+    function showStatusMessage(msg, type) {
+      const el = document.getElementById('introStatusMsg');
+      if (!el) return;
+      el.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'border-red-200', 'bg-blue-50', 'text-blue-700', 'border-blue-200', 'bg-green-50', 'text-green-700', 'border-green-200');
+      if (type === 'error') {
+        el.classList.add('bg-red-50', 'text-red-700', 'border-red-200');
+      } else if (type === 'success') {
+        el.classList.add('bg-green-50', 'text-green-700', 'border-green-200');
+      } else {
+        el.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-200');
+      }
+      el.textContent = msg;
+    }
+
+    async function handleStartVerification(event) {
+      if (event && event.preventDefault) event.preventDefault();
+
+      const pinInput = document.getElementById('inputPin');
+      const nameInput = document.getElementById('inputName');
+      const btn = document.getElementById('btnStartExam');
+      const btnText = document.getElementById('btnStartExamText');
+
+      const pin = pinInput.value.trim();
+      const name = nameInput.value.trim();
+
+      if (!pin || pin.length < 3) {
+        showStatusMessage('학생 핀번호(학번 또는 숫자 4~6자리)를 입력해주세요.', 'error');
+        pinInput.focus();
+        return;
+      }
+      if (!name || name.length < 1) {
+        showStatusMessage('학생 성명을 입력해주세요.', 'error');
+        nameInput.focus();
+        return;
+      }
+
+      state.studentPin = pin;
+      state.studentName = name;
+
+      btn.disabled = true;
+      btnText.textContent = '확인 중...';
+      showStatusMessage('학생 정보를 확인하는 중입니다...', 'info');
+
+      try {
+        // Mobile-safe JSONP verification with Google Sheet
+        const data = await callServerJsonp('VERIFY_STUDENT', { pin, name }, 3500);
+        if (data && data.success) {
+          state.verifiedStatus = data.status;
+          state.currentExamRound = (data.examCount || 0) + 1;
+          showStatusMessage(data.message, 'success');
+          setTimeout(() => {
+            beginExam(generateEthicsExamPaper());
+          }, 350);
+          return;
+        } else if (data && !data.success) {
+          showStatusMessage(data.message, 'error');
+          btn.disabled = false;
+          btnText.textContent = '학생 확인 및 시험 시작';
+          return;
+        }
+      } catch (err) {
+        console.warn("Ethics verify fallback to persistent local bridge:", err);
+      }
+
+      // Offline / Network delay fallback
+      const localPf = getStudentPortfolioLocally(pin);
+      const localCount = localPf && localPf.rounds ? localPf.rounds.length : 0;
+      state.currentExamRound = localCount + 1;
+      state.verifiedStatus = 'LOCAL_SYNC_READY';
+
+      showStatusMessage(`확인 완료! ${name} 학생 환영합니다. (도덕 시험 시작)`, 'success');
+      setTimeout(() => {
+        beginExam(generateEthicsExamPaper());
+      }, 350);
+    }
+
+    function handleCheckPortfolioFromIntro(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      const pin = document.getElementById('inputPin').value.trim();
+      const name = document.getElementById('inputName').value.trim();
+      if (!pin) {
+        showStatusMessage('포트폴리오 조회를 위해 핀번호를 먼저 입력해주세요.', 'error');
+        document.getElementById('inputPin').focus();
+        return;
+      }
+      state.studentPin = pin;
+      state.studentName = name || '학생';
+      document.getElementById('screenIntro').classList.add('hidden');
+      document.getElementById('screenPortfolio').classList.remove('hidden');
+      fetchAndRenderPortfolio(pin);
+    }
+
+    function beginExam(questions) {
+      state.examQuestions = questions;
+      state.examSubmitted = false;
+      state.examStartTime = Date.now();
+
+      document.getElementById('screenIntro').classList.add('hidden');
+      document.getElementById('screenResult').classList.add('hidden');
+      document.getElementById('screenPortfolio').classList.add('hidden');
+      document.getElementById('screenExam').classList.remove('hidden');
+
+      // Header updates
+      const headerInfo = document.getElementById('headerExamInfo');
+      headerInfo.classList.remove('hidden');
+      document.getElementById('headerStudentName').textContent = `${state.studentName} (${state.studentPin})`;
+
+      buildOmrMinimap();
+      loadQuestion(state.currentQuestionIndex || 0);
+
+      // Timer countdown
+      clearInterval(state.timerInterval);
+      updateTimerDisplay();
+      state.timerInterval = setInterval(() => {
+        state.timeRemaining--;
+        updateTimerDisplay();
+        saveProgressToLocal();
+
+        if (state.timeRemaining <= 0) {
+          clearInterval(state.timerInterval);
+          showModal('alert', '시험 시간 종료', '제한 시간 40분이 초과되어 답안이 자동 제출됩니다.', () => {
+            submitExam(true);
+          }, false);
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const timerEl = document.getElementById('timerDisplay');
+      const min = Math.floor(Math.max(0, state.timeRemaining) / 60);
+      const sec = Math.max(0, state.timeRemaining) % 60;
+      timerEl.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+      if (state.timeRemaining < 300) {
+        timerEl.classList.add('urgent-timer');
+      } else {
+        timerEl.classList.remove('urgent-timer');
+      }
+    }
+
+    function buildOmrMinimap() {
+      const omrGrid = document.getElementById('omrGrid');
+      omrGrid.innerHTML = '';
+
+      let answeredCount = 0;
+      state.examQuestions.forEach((q, idx) => {
+        const isAnswered = state.userAnswers[idx] !== undefined;
+        if (isAnswered) answeredCount++;
+
+        const isCurrent = (idx === state.currentQuestionIndex);
+        const omrBtn = document.createElement('button');
+        omrBtn.type = 'button';
+        omrBtn.textContent = idx + 1;
+
+        let baseClass = "h-8 rounded-lg font-mono text-xs font-bold transition flex items-center justify-center border ";
+        if (isCurrent) {
+          baseClass += "border-indigo-950 ring-2 ring-indigo-900 ";
+        } else {
+          baseClass += "border-slate-200 ";
+        }
+
+        if (isAnswered) {
+          baseClass += "bg-indigo-600 text-white";
+        } else {
+          baseClass += "bg-slate-50 text-slate-600 hover:bg-slate-100";
+        }
+
+        omrBtn.className = baseClass;
+        omrBtn.onclick = () => loadQuestion(idx);
+        omrGrid.appendChild(omrBtn);
+      });
+
+      document.getElementById('answeredCountBadge').textContent = `${answeredCount} / 25 완료`;
+    }
+
+    function loadQuestion(index) {
+      if (!state.examQuestions || index < 0 || index >= state.examQuestions.length) return;
+      state.currentQuestionIndex = index;
+      const q = state.examQuestions[index];
+
+      document.getElementById('qBadgeNum').textContent = `[${String(q.qNum).padStart(2, '0')}]`;
+      document.getElementById('qBadgeUnit').textContent = q.unit;
+      document.getElementById('qBadgeTopic').textContent = q.subTopic;
+
+      // Passage rendering
+      const passageBox = document.getElementById('qPassageContainer');
+      if (q.passage && q.passage.trim().length > 0) {
+        passageBox.textContent = q.passage;
+        passageBox.classList.remove('hidden');
+      } else {
+        passageBox.classList.add('hidden');
+      }
+
+      // Question prompt
+      document.getElementById('qText').textContent = q.text;
+
+      // Choices
+      const choicesContainer = document.getElementById('qChoices');
+      choicesContainer.innerHTML = '';
+      const choiceIcons = ['①', '②', '③', '④', '⑤'];
+
+      q.choices.forEach((choiceText, cIdx) => {
+        const choiceBtn = document.createElement('button');
+        choiceBtn.type = "button";
+        const isSelected = state.userAnswers[index] === cIdx;
+
+        choiceBtn.className = `w-full text-left choice-card p-3 sm:p-4 rounded-xl border border-slate-200 flex items-start space-x-2.5 sm:space-x-3 transition ${
+          isSelected ? 'selected' : 'bg-white'
+        }`;
+
+        choiceBtn.innerHTML = `
+          <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm shrink-0 mt-0.5 ${
+            isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700'
+          }">
+            ${choiceIcons[cIdx]}
+          </span>
+          <span class="text-xs sm:text-sm font-medium flex-1 leading-relaxed">${choiceText}</span>
+        `;
+
+        choiceBtn.onclick = () => selectChoice(index, cIdx);
+        choicesContainer.appendChild(choiceBtn);
+      });
+
+      document.getElementById('btnPrevQ').disabled = (index === 0);
+      document.getElementById('btnPrevQ').classList.toggle('opacity-40', index === 0);
+
+      const isLast = (index === state.examQuestions.length - 1);
+      document.getElementById('btnNextQ').classList.toggle('hidden', isLast);
+      document.getElementById('btnFinishExam').classList.toggle('hidden', !isLast);
+
+      buildOmrMinimap();
+    }
+
+    function selectChoice(qIndex, choiceIndex) {
+      state.userAnswers[qIndex] = choiceIndex;
+      saveProgressToLocal();
+      loadQuestion(qIndex);
+    }
+
+    function navigateQuestion(direction) {
+      const nextIndex = state.currentQuestionIndex + direction;
+      if (nextIndex >= 0 && nextIndex < state.examQuestions.length) {
+        loadQuestion(nextIndex);
+      }
+    }
+
+    function confirmSubmitExam() {
+      const total = state.examQuestions.length;
+      const answered = Object.keys(state.userAnswers).length;
+      const unanswered = total - answered;
+
+      let msg = "답안을 제출하고 채점을 진행하시겠습니까?";
+      if (unanswered > 0) {
+        msg = `아직 풀지 않은 문제가 ${unanswered}개 있습니다. 이대로 제출하시겠습니까?`;
+      }
+
+      showModal('confirm', '도덕 모의평가 최종 제출', msg, () => {
+        submitExam(false);
+      }, true);
+    }
+
+    async function submitExam(isAutoTimeout = false) {
+      clearInterval(state.timerInterval);
+      state.examSubmitted = true;
+
+      let totalScore = 0;
+      let citizenScore = 0;
+      let justiceScore = 0;
+      let northScore = 0;
+      let unificationScore = 0;
+      const wrongQuestions = [];
+      const itemLogs = [];
+
+      for (let i = 0; i < state.examQuestions.length; i++) {
+        const q = state.examQuestions[i];
+        const userChoice = state.userAnswers[i];
+        const isCorrect = (userChoice === q.answer);
+
+        if (isCorrect) {
+          totalScore += 4;
+          if (q.unit === "도덕적 시민") citizenScore += 4;
+          else if (q.unit === "사회 정의") justiceScore += 4;
+          else if (q.unit === "북한 이해") northScore += 4;
+          else if (q.unit === "통일 윤리") unificationScore += 4;
+        } else {
+          wrongQuestions.push(`Q${q.qNum}`);
+        }
+
+        itemLogs.push({
+          qNum: `Q${q.qNum}`,
+          unit: q.unit,
+          subTopic: q.subTopic,
+          isCorrect: isCorrect,
+          userChoice: userChoice !== undefined ? (userChoice + 1) : "미응답",
+          answer: (q.answer + 1)
+        });
+      }
+
+      const timeSpentSec = EXAM_DURATION_SEC - state.timeRemaining;
+
+      state.scoreData = {
+        totalScore,
+        citizenScore,
+        justiceScore,
+        northScore,
+        unificationScore,
+        timeSpentSec,
+        wrongQuestions,
+        itemLogs
+      };
+
+      // 1) Save to local device permanent portfolio (Instant 0.01s guaranteed)
+      const roundSummary = {
+        round: state.currentExamRound,
+        totalScore: totalScore,
+        citizenScore: citizenScore,
+        justiceScore: justiceScore,
+        northScore: northScore,
+        unificationScore: unificationScore,
+        date: new Date().toLocaleDateString('ko-KR')
+      };
+      saveStudentPortfolioLocally(state.studentPin, state.studentName, roundSummary, itemLogs);
+
+      safeStorage.removeItem('ethics_exam_state');
+      renderResultScreen();
+
+      // 2) Background submit to teacher's Google Sheet
+      const payload = {
+        action: 'SUBMIT_EXAM',
+        data: {
+          pin: state.studentPin,
+          name: state.studentName,
+          totalScore,
+          citizenScore,
+          justiceScore,
+          northScore,
+          unificationScore,
+          timeSpentSec,
+          wrongQuestions,
+          itemLogs
+        }
+      };
+
+      try {
+        fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        }).then(r => r.json()).then(res => {
+          if (res && res.success) {
+            state.currentExamRound = res.round;
+          }
+        }).catch(e => {
+          console.warn("Background sheet sync note (offline safe):", e);
+        });
+      } catch (err) {
+        console.warn("Sheet submit attempt completed:", err);
+      }
+    }
+
+    function saveProgressToLocal() {
+      if (state.examSubmitted) return;
+      try {
+        const payload = {
+          pin: state.studentPin,
+          name: state.studentName,
+          examQuestions: state.examQuestions,
+          userAnswers: state.userAnswers,
+          timeRemaining: state.timeRemaining,
+          currentQuestionIndex: state.currentQuestionIndex,
+          timestamp: Date.now()
+        };
+        safeStorage.setItem('ethics_exam_state', JSON.stringify(payload));
+      } catch (e) {}
+    }
+
+    function checkRecoverableSession() {
+      try {
+        const saved = safeStorage.getItem('ethics_exam_state');
+        if (!saved) return;
+
+        const parsed = JSON.parse(saved);
+        if (parsed.examQuestions && parsed.examQuestions.length === 25 &&
+            Date.now() - parsed.timestamp < 50 * 60 * 1000 && parsed.timeRemaining > 0) {
+          showModal('info', '진행 중이던 도덕 시험 복구', 
+            `이전에 응시 중이던 ${parsed.name} 학생의 답안과 남은 시간(${Math.floor(parsed.timeRemaining/60)}분)이 발견되었습니다. 이어서 시험을 치르시겠습니까?`,
+            () => {
+              state.studentPin = parsed.pin;
+              state.studentName = parsed.name;
+              state.userAnswers = parsed.userAnswers || {};
+              state.timeRemaining = parsed.timeRemaining;
+              state.currentQuestionIndex = parsed.currentQuestionIndex || 0;
+              beginExam(parsed.examQuestions);
+            },
+            true
+          );
+        } else {
+          safeStorage.removeItem('ethics_exam_state');
+        }
+      } catch (e) {
+        safeStorage.removeItem('ethics_exam_state');
+      }
+    }
+
+    function renderResultScreen() {
+      document.getElementById('screenExam').classList.add('hidden');
+      document.getElementById('screenResult').classList.remove('hidden');
+
+      const s = state.scoreData;
+      document.getElementById('resultStudentMeta').textContent = 
+        `${state.studentName} (${state.studentPin}) 수험생 · 응시 회차: ${state.currentExamRound}회`;
+
+      document.getElementById('resTotalScore').textContent = s.totalScore;
+      document.getElementById('resScoreSummary').textContent = 
+        `정답 ${Math.round(s.totalScore / 4)}개 / 오답 ${25 - Math.round(s.totalScore / 4)}개`;
+      
+      document.getElementById('resCitizenScore').textContent = `${s.citizenScore}점`;
+      document.getElementById('resJusticeScore').textContent = `${s.justiceScore}점`;
+      document.getElementById('resNorthScore').textContent = `${s.northScore}점`;
+      document.getElementById('resUnificationScore').textContent = `${s.unificationScore}점`;
+
+      renderReviewQuestions();
+    }
+
+    function renderReviewQuestions() {
+      const container = document.getElementById('reviewQuestionsContainer');
+      container.innerHTML = '';
+
+      state.examQuestions.forEach((q, idx) => {
+        const userChoice = state.userAnswers[idx];
+        const isCorrect = (userChoice === q.answer);
+
+        if (state.reviewFilter === 'WRONG' && isCorrect) return;
+
+        const choiceIcons = ['①', '②', '③', '④', '⑤'];
+        const card = document.createElement('div');
+        card.className = `p-4 sm:p-5 rounded-2xl border ${
+          isCorrect ? 'bg-slate-50 border-slate-200' : 'bg-red-50/40 border-red-200'
+        } space-y-3`;
+
+        let statusBadge = isCorrect
+          ? `<span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>정답</span>`
+          : `<span class="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 text-xs font-bold"><i class="fa-solid fa-xmark mr-1"></i>오답</span>`;
+
+        let passageHtml = '';
+        if (q.passage && q.passage.trim().length > 0) {
+          passageHtml = `<div class="passage-box p-3 rounded-xl text-xs text-slate-700 whitespace-pre-line">${q.passage}</div>`;
+        }
+
+        let userChoiceText = userChoice !== undefined 
+          ? `${choiceIcons[userChoice]} ${q.choices[userChoice]}` 
+          : '<span class="text-rose-600 font-bold">미응답</span>';
+        let correctChoiceText = `${choiceIcons[q.answer]} ${q.choices[q.answer]}`;
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between border-b border-slate-200/80 pb-2">
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-sm text-slate-800">[Q${q.qNum}]</span>
+              <span class="text-xs text-indigo-700 font-semibold">${q.unit}</span>
+              <span class="text-xs text-slate-500 font-medium">· ${q.subTopic}</span>
+            </div>
+            ${statusBadge}
+          </div>
+          ${passageHtml}
+          <div class="text-sm font-medium text-slate-800">${q.text}</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs bg-white p-2.5 rounded-xl border border-slate-200">
+            <div><span class="text-slate-500">내가 고른 답:</span> <strong>${userChoiceText}</strong></div>
+            <div><span class="text-slate-500">실제 정답:</span> <strong class="text-indigo-600">${correctChoiceText}</strong></div>
+          </div>
+          <div class="text-xs bg-indigo-50/70 p-3 rounded-xl border border-indigo-200 text-slate-700 leading-relaxed">
+            <div class="font-bold text-indigo-900 mb-1 flex items-center space-x-1">
+              <i class="fa-solid fa-lightbulb text-amber-500"></i>
+              <span>교과서 핵심 도덕 해설</span>
+            </div>
+            <div>${q.explanation || '해설이 제공되지 않는 문항입니다.'}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function setReviewFilter(filter) {
+      state.reviewFilter = filter;
+      document.getElementById('filterTabAll').className = filter === 'ALL'
+        ? "px-3 py-1.5 rounded-lg bg-white shadow-xs text-slate-900 transition"
+        : "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition";
+      document.getElementById('filterTabWrong').className = filter === 'WRONG'
+        ? "px-3 py-1.5 rounded-lg bg-white shadow-xs text-slate-900 transition"
+        : "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition";
+      renderReviewQuestions();
+    }
+
+    function handleRestartClinic() {
+      if (!state.scoreData || !state.scoreData.wrongQuestions) return;
+      const wrongList = state.examQuestions.filter((q, idx) => state.userAnswers[idx] !== q.answer);
+      if (wrongList.length === 0) {
+        showModal('info', '오답 클리닉 안내', '틀린 문제가 없습니다! 100점 만점을 축하합니다.', null, false);
+        return;
+      }
+      state.userAnswers = {};
+      state.timeRemaining = wrongList.length * 120; // 2 minutes per wrong question
+      state.currentQuestionIndex = 0;
+      beginExam(wrongList);
+    }
+
+    function handleViewPortfolio() {
+      document.getElementById('screenResult').classList.add('hidden');
+      document.getElementById('screenPortfolio').classList.remove('hidden');
+      fetchAndRenderPortfolio(state.studentPin);
+    }
+
+    function handleBackFromPortfolio() {
+      document.getElementById('screenPortfolio').classList.add('hidden');
+      if (state.scoreData) {
+        document.getElementById('screenResult').classList.remove('hidden');
+      } else {
+        document.getElementById('screenIntro').classList.remove('hidden');
+        document.getElementById('btnStartExam').disabled = false;
+        document.getElementById('btnStartExamText').textContent = '학생 확인 및 시험 시작';
+      }
+    }
+
+    async function fetchAndRenderPortfolio(pin) {
+      const feedbackEl = document.getElementById('portfolioAiFeedback');
+
+      // 1) Instant render from local persistent storage (0.01s)
+      let localData = getStudentPortfolioLocally(pin);
+      if (localData && localData.rounds && localData.rounds.length > 0) {
+        renderPortfolioCharts(localData);
+        generateAiFeedback(localData);
+      } else {
+        feedbackEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2 text-indigo-600"></i>누적 도덕 포트폴리오를 불러오는 중입니다...';
+      }
+
+      // 2) Background synchronization from Google Apps Script JSONP
+      try {
+        const serverData = await callServerJsonp('GET_PORTFOLIO', { pin }, 4000);
+        if (serverData && serverData.success && serverData.rounds && serverData.rounds.length > 0) {
+          renderPortfolioCharts(serverData);
+          generateAiFeedback(serverData);
+          safeStorage.setItem(`ethics_persistent_portfolio_${pin}`, JSON.stringify({
+            name: state.studentName,
+            pin: pin,
+            rounds: serverData.rounds,
+            domainStats: serverData.domainStats,
+            topicStats: serverData.topicStats
+          }));
+        }
+      } catch (err) {
+        console.warn("Background server ethics portfolio sync note:", err);
+      }
+    }
+
+    function renderPortfolioCharts(data) {
+      document.getElementById('portfolioStudentName').textContent = state.studentName || '학생';
+      document.getElementById('portfolioPinBadge').textContent = `PIN: ${state.studentPin || '-'}`;
+
+      // 1) Rounds line chart
+      const roundsCanvas = document.getElementById('chartScoreRounds');
+      if (roundsCanvas && data.rounds) {
+        const labels = data.rounds.map(r => `${r.round}회차`);
+        const scores = data.rounds.map(r => r.totalScore);
+
+        if (roundsChartInstance) roundsChartInstance.destroy();
+        roundsChartInstance = new Chart(roundsCanvas.getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: '총점 (100점 만점)',
+              data: scores,
+              borderColor: '#4f46e5',
+              backgroundColor: 'rgba(79, 70, 229, 0.1)',
+              borderWidth: 2.5,
+              tension: 0.3,
+              fill: true,
+              pointRadius: 5,
+              pointBackgroundColor: '#3730a3'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { min: 0, max: 100, ticks: { stepSize: 20 } }
+            }
+          }
+        });
+      }
+
+      // 2) 4 Moral Domains Radar Chart
+      const radarCanvas = document.getElementById('chartDomainRadar');
+      if (radarCanvas) {
+        const domains = ["도덕적 시민", "사회 정의", "북한 이해", "통일 윤리"];
+        const domainPercentages = calculateDomainPercentages(data.domainStats);
+
+        if (radarChartInstance) radarChartInstance.destroy();
+        radarChartInstance = new Chart(radarCanvas.getContext('2d'), {
+          type: 'radar',
+          data: {
+            labels: domains,
+            datasets: [{
+              label: '영역별 성취도 (%)',
+              data: domainPercentages,
+              borderColor: '#0284c7',
+              backgroundColor: 'rgba(2, 132, 199, 0.2)',
+              borderWidth: 2,
+              pointBackgroundColor: '#0369a1'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: { min: 0, max: 100, ticks: { stepSize: 25, display: false } }
+            }
+          }
+        });
+      }
+
+      // 3) Subtopic bars
+      const barsContainer = document.getElementById('portfolioTopicBars');
+      if (barsContainer && data.topicStats) {
+        barsContainer.innerHTML = '';
+        Object.keys(data.topicStats).forEach(tName => {
+          const st = data.topicStats[tName];
+          const pct = Math.round((st.correct / st.total) * 100) || 0;
+          const barDiv = document.createElement('div');
+          barDiv.className = "bg-white p-3 rounded-xl border border-slate-200 text-xs";
+          barDiv.innerHTML = `
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-bold text-slate-800 truncate">${tName}</span>
+              <span class="font-mono text-slate-500">${st.correct}/${st.total} (${pct}%)</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div class="bg-indigo-600 h-2 rounded-full transition-all" style="width: ${pct}%"></div>
+            </div>
+          `;
+          barsContainer.appendChild(barDiv);
+        });
+      }
+    }
+
+    function calculateDomainPercentages(stats) {
+      if (!stats) return [85, 80, 75, 80];
+      const keys = ["도덕적 시민", "사회 정의", "북한 이해", "통일 윤리"];
+      return keys.map(k => {
+        if (stats[k] && stats[k].total > 0) {
+          return Math.round((stats[k].correct / stats[k].total) * 100);
+        }
+        return 80;
+      });
+    }
+
+    function generateAiFeedback(data) {
+      const fbEl = document.getElementById('portfolioAiFeedback');
+      if (!fbEl) return;
+      const avgScore = data.rounds && data.rounds.length > 0
+        ? Math.round(data.rounds.reduce((acc, r) => acc + r.totalScore, 0) / data.rounds.length)
+        : 80;
+
+      let weakest = "통일 윤리 의식";
+      if (data.domainStats) {
+        let minRatio = 999;
+        Object.keys(data.domainStats).forEach(k => {
+          const item = data.domainStats[k];
+          if (item.total > 0) {
+            const ratio = item.correct / item.total;
+            if (ratio < minRatio) {
+              minRatio = ratio;
+              weakest = k;
+            }
+          }
+        });
+      }
+
+      let advice = "";
+      if (avgScore >= 90) {
+        advice = `${state.studentName} 학생은 도덕적 시민의 자질, 사회 정의론(롤스의 원칙), 북한의 이중적 시각 및 평화 통일 비전 전반에서 최고 수준의 가치 판단 능력을 발휘하고 있습니다. 교과서 사료 지문 분석력 또한 탁월하여 실전 지필평가에서 100점 만점이 유력합니다.`;
+      } else if (avgScore >= 75) {
+        advice = `${state.studentName} 학생은 준법과 공익의 상관관계 및 북한 이탈 주민의 적응 과제 등 주요 개념을 안정적으로 파악하고 있습니다. 다만, '${weakest}' 단원의 복합 지문 분석(예: 시민 불복종의 4대 정당화 조건 세부 대조, 통일 비용과 통일 편익의 경제적 성격 비교)에서 간헐적인 오답이 확인되므로 오답 클리닉을 통한 복습을 권장합니다.`;
+      } else {
+        advice = `${state.studentName} 학생은 교과서 본문 지문(소로의 시민 불복종, 자한의 옥 거부, 마틴 루서 킹 연설문 등)의 핵심 취지를 명확히 정리할 필요가 있습니다. 특히 취약 단원인 '${weakest}' 영역의 개념 정리를 중심으로 '틀린 문제 다시 풀기'를 적극 활용해 보세요.`;
+      }
+      fbEl.textContent = advice;
+    }
+
+    function showModal(type, title, desc, onConfirm, showCancel = false) {
+      const modal = document.getElementById('customModal');
+      const iconContainer = document.getElementById('modalIconContainer');
+      const titleEl = document.getElementById('modalTitle');
+      const descEl = document.getElementById('modalDesc');
+      const btnGroup = document.getElementById('modalButtons');
+
+      titleEl.textContent = title;
+      descEl.textContent = desc;
+
+      if (type === 'alert' || type === 'error') {
+        iconContainer.className = "w-10 h-10 sm:w-12 sm:h-12 rounded-full mx-auto flex items-center justify-center text-base sm:text-lg mb-3 bg-red-100 text-red-600";
+        iconContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+      } else if (type === 'confirm') {
+        iconContainer.className = "w-10 h-10 sm:w-12 sm:h-12 rounded-full mx-auto flex items-center justify-center text-base sm:text-lg mb-3 bg-indigo-100 text-indigo-600";
+        iconContainer.innerHTML = '<i class="fa-solid fa-circle-question"></i>';
+      } else {
+        iconContainer.className = "w-10 h-10 sm:w-12 sm:h-12 rounded-full mx-auto flex items-center justify-center text-base sm:text-lg mb-3 bg-slate-100 text-slate-600";
+        iconContainer.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
+      }
+
+      btnGroup.innerHTML = '';
+      if (showCancel) {
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = "px-4 py-2 bg-slate-100 text-slate-700 text-xs font-bold rounded-xl active:bg-slate-200 transition";
+        cancelBtn.textContent = '취소';
+        cancelBtn.onclick = closeModal;
+        btnGroup.appendChild(cancelBtn);
+      }
+
+      const confirmBtn = document.createElement('button');
+      confirmBtn.type = 'button';
+      confirmBtn.className = "px-5 py-2 bg-indigo-950 text-white text-xs font-bold rounded-xl active:bg-indigo-900 transition";
+      confirmBtn.textContent = '확인';
+      confirmBtn.onclick = () => {
+        closeModal();
+        if (onConfirm) onConfirm();
+      };
+      btnGroup.appendChild(confirmBtn);
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('customModal').classList.add('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      checkRecoverableSession();
+    });
+  </script>
+</body>
+</html>
